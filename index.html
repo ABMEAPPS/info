@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!--
+  Athena — The Configurator
+  Version: 0.3.1.1
+  Copyright 2026 by Alan H. Jordan | All Rights Reserved | Digital and Otherwise
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0D1024" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Athena — The Configurator</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="Athena192x192.png" />
+  <link rel="apple-touch-icon" href="Athena192x192.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0D1024;
+      color: #E8E0D0;
+      min-height: 100dvh;
+      min-height: 100vh; /* fallback */
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    #root { min-height: 100dvh; min-height: 100vh; display: flex; flex-direction: column; }
+    .fatal-error {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100dvh; min-height: 100vh; padding: 2rem; text-align: center;
+    }
+    .fatal-error h1 { font-family: 'Cormorant Garamond', serif; color: #C9A84C; margin-bottom: 1rem; }
+    .fatal-error p { color: #9A9BAF; max-width: 30ch; margin: 0 auto; }
+  </style>
+  <script>
+    // Global error handler — catches anything before React mounts
+    window.onerror = function(msg, src, line, col, err) {
+      console.error('[Athena Fatal]', msg, src, line, col, err);
+      var root = document.getElementById('root');
+      if (root && !root.dataset.reactMounted) {
+        var errDetail = (msg || 'Unknown error') + ' (line ' + (line || '?') + ')';
+        var reportText = 'Athena Startup Error Report\n---\n' +
+          'Error: ' + errDetail + '\n' +
+          'Source: ' + (src || 'unknown') + '\n' +
+          'Time: ' + new Date().toISOString() + '\n' +
+          'Device: ' + navigator.userAgent + '\n---\n' +
+          'What I was doing: (please describe briefly)';
+        var advice = '';
+        if (errDetail.indexOf("'") > -1 && (errDetail.indexOf('Unexpected') > -1 || errDetail.indexOf('missing') > -1)) {
+          advice = '<div style="background:rgba(201,168,76,0.12);border:1px solid #C9A84C;border-radius:8px;' +
+            'padding:0.85rem 1rem;margin-bottom:1rem;text-align:left;font-size:1rem;color:#C9A84C;line-height:1.4">' +
+            '<strong>Tip:</strong> Tell tech support to check the code for single-quote marks causing bad syntax.</div>';
+        }
+        root.innerHTML = '<div class="fatal-error"><div style="max-width:500px;width:100%">' +
+          '<h1 style="margin-bottom:0.75rem">I\'m having trouble starting up</h1>' +
+          '<p style="margin-bottom:1.25rem;line-height:1.5;color:#9A9BAF;font-size:1.1rem">' +
+          'I\'m sorry about this. The error details are shown below. Please copy them and email them to our support team.</p>' +
+          '<div style="background:rgba(255,255,255,0.05);border:1px solid #C9A84C;border-radius:8px;' +
+          'padding:1rem;margin-bottom:1.25rem">' +
+          '<div style="font-size:1rem;color:#9A9BAF;margin-bottom:0.35rem">Send error details to:</div>' +
+          '<div style="font-size:1.3rem;color:#C9A84C;font-weight:600">techsupport@max-opp.com</div></div>' +
+          '<textarea id="athena-error-report" readonly onclick="this.select()" style="width:100%;min-height:10rem;' +
+          'padding:1rem;background:rgba(255,255,255,0.05);color:#6B6D80;border:1px solid #2A2D4A;border-radius:8px;' +
+          'font-size:0.95rem;font-family:monospace;line-height:1.4;resize:vertical;margin-bottom:0.75rem">' +
+          reportText + '</textarea>' +
+          advice +
+          '<button onclick="var ta=document.getElementById(\'athena-error-report\');' +
+          'if(navigator.clipboard){navigator.clipboard.writeText(ta.value).then(function(){' +
+          'event.target.textContent=\'✓ Copied to Clipboard\';setTimeout(function(){' +
+          'event.target.textContent=\'Copy Error Details\'},3000)}).catch(function(){' +
+          'ta.select();document.execCommand(\'copy\')})}else{ta.select();document.execCommand(\'copy\')}" ' +
+          'style="display:block;width:100%;background:#C9A84C;color:#0D1024;border:none;border-radius:8px;' +
+          'padding:1rem 1.75rem;font-size:1.15rem;font-weight:600;cursor:pointer;margin-bottom:1rem">' +
+          'Copy Error Details</button>' +
+          '<p style="font-size:0.9rem;color:#6B6D80;margin-top:0.5rem">' +
+          'If this keeps happening, try clearing your browser data for this site.</p>' +
+          '</div></div>';
+      }
+      return false;
+    };
+    window.onunhandledrejection = function(e) {
+      console.error('[Athena Unhandled Promise]', e.reason);
+    };
+  </script>
+</head>
+<body>
+  <div id="root">
+    <div class="fatal-error">
+      <div>
+        <h1>Loading Athena…</h1>
+        <p>This should only take a moment. If this screen stays visible, check your internet connection or try refreshing the page.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- React 18 + Babel standalone -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- App modules (order matters) -->
+  <script src="shared.js"></script>
+  <script src="interview-data.js"></script>
+  <script type="text/babel" src="components.js"></script>
+  <script type="text/babel" src="tour-view.js"></script>
+  <script type="text/babel" src="interview-view.js"></script>
+  <script type="text/babel" src="tier2-view.js"></script>
+  <script type="text/babel" src="finalize-view.js"></script>
+  <script type="text/babel" src="settings-view.js"></script>
+  <script type="text/babel" src="credentials-view.js"></script>
+  <script type="text/babel" src="dashboard-view.js"></script>
+  <script type="text/babel" src="profile-view.js"></script>
+  <script type="text/babel" src="app.js"></script>
+
+  <script>
+    // Register service worker with update detection
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js')
+          .then(function(reg) {
+            console.log('[Athena] SW registered, scope:', reg.scope);
+            // Check for updates every 30 minutes
+            setInterval(function() { reg.update(); }, 30 * 60 * 1000);
+            reg.addEventListener('updatefound', function() {
+              var newWorker = reg.installing;
+              if (!newWorker) return;
+              newWorker.addEventListener('statechange', function() {
+                if (newWorker.state === 'activated') {
+                  var banner = document.createElement('div');
+                  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;' +
+                    'background:#C9A84C;color:#0D1024;padding:12px 16px;text-align:center;' +
+                    'font-family:"DM Sans",sans-serif;font-size:15px;font-weight:600;' +
+                    'box-shadow:0 2px 8px rgba(0,0,0,0.3);';
+                  banner.innerHTML = 'A new version of Athena is available. ' +
+                    '<button style="margin-left:12px;padding:6px 18px;border-radius:6px;' +
+                    'border:none;background:#0D1024;color:#C9A84C;font-weight:700;cursor:pointer;' +
+                    'font-size:14px;" onclick="window.location.reload()">Update Now</button>';
+                  document.body.appendChild(banner);
+                }
+              });
+            });
+          })
+          .catch(function(err) { console.warn('[Athena] SW registration failed:', err); });
+      });
+    }
+  </script>
+</body>
+</html>

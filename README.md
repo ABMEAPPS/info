@@ -1,2 +1,2 @@
-# Info
-This site provides information that's requested for ABMe Applications. 
+# Athena
+An app to tap the wisdom of Subject Matter Experts.
