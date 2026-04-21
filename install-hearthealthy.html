@@ -4,90 +4,181 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Install Healthy Heart — A Better Me Apps</title>
-
 <style>
-  body { font-family: 'Times New Roman', Georgia, serif; max-width: 680px; margin: 40px auto; padding: 0 24px; color: #334155; line-height: 1.7; }
-  h1 { color: #1E3A5F; font-size: 26px; margin-bottom: 4px; }
-  h2 { color: #1E3A5F; font-size: 20px; margin-top: 28px; }
-  .tagline { color: #1F4D78; font-style: italic; font-size: 18px; margin-bottom: 24px; }
-  .updated { color: #64748B; font-size: 14px; margin-bottom: 24px; }
-  p { margin: 10px 0; }
-  li { margin: 6px 0; }
-  a { color: #2563EB; }
-  .cta { display: inline-block; background: #1E3A5F; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 18px; margin: 20px 0; }
-  .cta:hover { background: #2a4f7a; }
-  .note { background: #F1F5F9; border-left: 4px solid #1E3A5F; padding: 12px 16px; margin: 16px 0; font-size: 15px; }
-  .stop { color: #64748B; font-size: 13px; margin-top: 32px; border-top: 1px solid #E2E8F0; padding-top: 12px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #1f2937;
+    background: #f8fafc;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #7F1D1D;
+    margin: 0 0 4px;
+    letter-spacing: -0.5px;
+  }
+  .tagline {
+    font-size: 16px;
+    color: #64748b;
+    margin: 0 0 24px;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 32px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #fee2e2;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 20px 0 8px;
+  }
+  p { margin: 0 0 14px; }
+  ol, ul { margin: 0 0 14px; padding-left: 24px; }
+  li { margin-bottom: 6px; }
+  strong { color: #1f2937; }
+  code {
+    background: #f1f5f9;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.92em;
+    color: #334155;
+  }
+  .cta {
+    display: inline-block;
+    background: #DC2626;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    margin: 8px 0 16px;
+  }
+  .cta:hover { background: #B91C1C; }
+  .note {
+    background: #fef3c7;
+    border-left: 4px solid #F59E0B;
+    padding: 12px 14px;
+    margin: 16px 0;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .note strong { color: #92400e; }
+  .privacy {
+    background: #f0fdf4;
+    border-left: 4px solid #10b981;
+    padding: 12px 14px;
+    margin: 24px 0;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  footer {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  footer a { color: #64748b; text-decoration: none; margin: 0 6px; }
+  footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
+<main>
 
-<h1>Healthy Heart v0.9.0</h1>
-<div class="tagline">Cardiac Health Tracker</div>
+<h1>Install Healthy Heart</h1>
+<p class="tagline">Cardiac health tracker — for patients, and the providers who care for them.</p>
 
-<p>Healthy Heart tracks blood pressure, pulse, oxygen saturation, weight, medications, and cardiac events. Every reading is classified by AHA standards with color coding.</p>
+<p>Healthy Heart is a self-contained cardiac health tracking app. It records blood pressure, pulse, oxygen saturation, weight, medications, symptoms, and cardiac events. Every reading is classified by American Heart Association standards with clear color coding. The app generates a clinical report — with trend charts, summary statistics, and medication adherence data — that patients can share with their healthcare provider.</p>
 
 <a class="cta" href="https://abmeapps.github.io/HeartHealthy/">Open Healthy Heart</a>
 
-<h2>How to Install on Your Phone</h2>
+<h2>What to expect on first launch</h2>
 
-<div class="note">
-Healthy Heart is a web app that installs directly from your browser. There is no app store download required. It works offline once installed.
-</div>
+<p>When you first open the app, you'll see a brief setup interview — name, device types, what you want to track, medication preferences. It takes under a minute.</p>
 
-<h2>Android (Chrome)</h2>
+<p>If you'd rather skip the interview and see the app immediately, tap <strong>Preserve existing setup</strong> on the first screen.</p>
+
+<div class="note"><strong>Demo Mode is on by default.</strong> You'll see 30 days of realistic sample data from a hypothetical 58-year-old patient named Alex — elevated blood pressure, an ER visit, medication adjustments, and a recovery arc. All demo data is fictional. Tap <strong>✕ Exit Demo</strong> at the top of the screen when you're ready to log your own readings.</div>
+
+<h2>How to Install on Your Device</h2>
+
+<p>Healthy Heart is a web app that installs directly from your browser. No app store download required. Once installed, it works offline for viewing and logging data; an internet connection is needed only for the Help Bot feature and for the first-time install.</p>
+
+<h3>iPhone or iPad (Safari)</h3>
 <ol>
-<li>Tap the link above to open Healthy Heart in Chrome.</li>
-<li>If Chrome shows an "Install" or "Add to Home Screen" banner at the bottom, tap it.</li>
-<li>If no banner appears: tap the three-dot menu (⋮) in the top-right corner, then tap <strong>"Add to Home Screen"</strong> or <strong>"Install app."</strong></li>
-<li>Tap <strong>"Install"</strong> to confirm.</li>
-<li>The app icon will appear on your home screen. Tap it to open the app anytime.</li>
+  <li>Open the <strong>Open Healthy Heart</strong> link above in <strong>Safari</strong> — not Chrome, Firefox, or another browser.</li>
+  <li>Tap the <strong>Share</strong> button (the square with an arrow pointing up out of it). It's at the bottom-center of the screen on iPhone; top-right on iPad.</li>
+  <li>Scroll down in the share sheet and tap <strong>Add to Home Screen</strong>.</li>
+  <li>You can edit the name if you'd like. Tap <strong>Add</strong> in the top-right corner.</li>
+  <li>The app icon (a stylized blood-pressure monitor card) will appear on your home screen. Tap it to open Healthy Heart anytime.</li>
 </ol>
 
-<h2>iPhone / iPad (Safari)</h2>
+<h3>Android (Chrome)</h3>
 <ol>
-<li>Open the link above in <strong>Safari</strong> (not Chrome or another browser).</li>
-<li>Tap the <strong>Share</strong> button (the square with an arrow pointing up) at the bottom of the screen.</li>
-<li>Scroll down and tap <strong>"Add to Home Screen."</strong></li>
-<li>Tap <strong>"Add"</strong> in the top-right corner.</li>
-<li>The app icon will appear on your home screen. Tap it to open the app anytime.</li>
+  <li>Tap the <strong>Open Healthy Heart</strong> link above to open it in Chrome.</li>
+  <li>If Chrome shows an <strong>Install</strong> or <strong>Add to Home Screen</strong> prompt at the bottom, tap it.</li>
+  <li>If no prompt appears: tap the three-dot menu (⋮) in the top-right corner, then tap <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</li>
+  <li>Tap <strong>Install</strong> to confirm.</li>
+  <li>The app icon will appear on your home screen. Tap it to open Healthy Heart anytime.</li>
 </ol>
 
-<h2>Desktop (Windows, Mac, Chromebook)</h2>
+<h3>Desktop (Windows, Mac, Chromebook, Linux)</h3>
 <ol>
-<li>Open the link above in Chrome, Edge, or another modern browser.</li>
-<li>Look for an <strong>install icon</strong> in the address bar (a monitor with a down arrow, or a "+" icon).</li>
-<li>Click it and confirm the installation.</li>
-<li>The app will appear in your system's app launcher or desktop.</li>
+  <li>Open the <strong>Open Healthy Heart</strong> link above in Chrome, Edge, or another modern Chromium-based browser. Firefox and Safari desktop do not currently support installing progressive web apps.</li>
+  <li>Look for an <strong>install icon</strong> in the address bar — typically a small monitor with a downward arrow, or a circular <strong>+</strong>.</li>
+  <li>Click it and confirm the installation.</li>
+  <li>The app will appear in your system's app launcher, Start menu, or Applications folder, and can be pinned to the dock or taskbar.</li>
 </ol>
 
-<h2>How to Completely Uninstall</h2>
+<h2>How to Uninstall</h2>
 
-<h2>Android</h2>
+<p>Uninstalling Healthy Heart removes the app from your device along with <strong>all of the data you have logged in it</strong> — blood-pressure readings, medications, events, settings, and custom sounds. If you want to keep any of that data, use the <strong>Export CSV</strong> button in the app's Settings tab first.</p>
+
+<h3>iPhone or iPad</h3>
 <ol>
-<li>Long-press the app icon on your home screen.</li>
-<li>Tap <strong>"Uninstall"</strong> or drag it to the trash icon.</li>
-<li>To remove all stored data: open Chrome, go to <strong>Settings → Site Settings → All Sites</strong>, find <strong>abmeapps.github.io</strong>, and tap <strong>"Clear &amp; Reset."</strong></li>
+  <li>Long-press the Healthy Heart icon on your home screen.</li>
+  <li>Tap <strong>Remove App</strong>, then tap <strong>Delete App</strong>.</li>
+  <li>To also clear the browser's stored data: open the iOS <strong>Settings</strong> app → scroll down and tap <strong>Safari</strong> → <strong>Advanced</strong> → <strong>Website Data</strong> → find <code>abmeapps.github.io</code> and swipe left to delete.</li>
 </ol>
 
-<h2>iPhone / iPad</h2>
+<h3>Android</h3>
 <ol>
-<li>Long-press the app icon on your home screen.</li>
-<li>Tap <strong>"Remove Bookmark"</strong> or <strong>"Delete."</strong></li>
-<li>To remove all stored data: open Safari, go to <strong>Settings → Safari → Advanced → Website Data</strong>, find <strong>abmeapps.github.io</strong>, and swipe to delete.</li>
+  <li>Long-press the Healthy Heart icon on your home screen.</li>
+  <li>Tap <strong>Uninstall</strong>, or drag the icon to the trash.</li>
+  <li>To also clear stored data: open Chrome → three-dot menu → <strong>Settings</strong> → <strong>Site Settings</strong> → <strong>All Sites</strong> → find <code>abmeapps.github.io</code> → <strong>Clear &amp; Reset</strong>.</li>
 </ol>
 
-<h2>Desktop</h2>
+<h3>Desktop</h3>
 <ol>
-<li>Open the app, click the three-dot menu in the title bar, and select <strong>"Uninstall."</strong></li>
-<li>Check <strong>"Also clear data"</strong> if offered, then confirm.</li>
+  <li>Open the installed Healthy Heart app.</li>
+  <li>Click the three-dot menu in the app's title bar and select <strong>Uninstall Healthy Heart</strong>.</li>
+  <li>If prompted, check <strong>Also clear data</strong>, then confirm.</li>
 </ol>
 
-<div class="note">
-<strong>Your data stays on your device.</strong> Uninstalling the app removes all data stored by the app. If you want to keep a copy, use the app's export feature before uninstalling.
-</div>
+<div class="privacy"><strong>Where your data lives.</strong> All of your health information — blood pressure readings, medications, symptoms, events, weight, SpO₂, stethoscope cross-checks — is stored <strong>locally on your device</strong>. None of it is sent to any server. The one exception is the built-in <strong>Help Bot</strong>: questions you type into Help Bot are sent to an AI service to generate a response, but your health data is never included in those requests.</div>
 
-<p class="stop">A Better Me Apps &middot; <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> &middot; <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> &middot; Contact: info@max-opp.com</p>
+<footer>
+  A Better Me Apps ·
+  <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> ·
+  <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> ·
+  Contact: <a href="mailto:info@max-opp.com">info@max-opp.com</a>
+</footer>
 
+</main>
 </body>
 </html>
