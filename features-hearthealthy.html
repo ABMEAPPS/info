@@ -73,7 +73,7 @@
 
 <div class="hero"><strong>Value proposition.</strong> Patients arrive at appointments with a professional clinical report &mdash; trend charts, medication adherence, symptom history &mdash; instead of handwritten notes or nothing at all. The report can also be forwarded ahead of an appointment as a springboard for discussion.</div>
 
-<p>Healthy Heart is a self-contained web app for cardiac health self-tracking. Patients log blood pressure, pulse, oxygen saturation, weight, symptoms, medications, and cardiac events. The app classifies every reading against AHA standards, tracks trends over time, and generates a clinical report that patients can share at appointments, or forward prior to an appointment as a springboard for discussion.</p>
+<p>Healthy Heart is a self-contained web app for cardiac health self-tracking. Patients log blood pressure, pulse, oxygen saturation, weight, symptoms, medications, and cardiac events. The app classifies every reading against AHA standards, tracks trends over time, and generates the clinical report described below.</p>
 
 <a class="cta" href="https://abmeapps.github.io/HeartHealthy/">Try Healthy Heart</a>
 <a class="cta secondary" href="https://abmeapps.github.io/info/install-hearthealthy.html">Install guide</a>
@@ -86,59 +86,54 @@
   </div>
 </div>
 
-<h2>What patients can log</h2>
-<ul>
-  <li><strong>Blood pressure</strong> (systolic / diastolic), pulse, SpO<sub>2</sub>, and weight &mdash; every reading classified by American Heart Association categories with clear color coding.</li>
-  <li><strong>Context for every reading</strong>: reading arm, body position (sitting, standing, lying down, reclining), category (standard, morning, evening, post-exercise, test).</li>
-  <li><strong>Symptoms at the time of reading</strong>: chest pain, dizziness, fatigue, shortness of breath, palpitations, headache, nausea, swelling, or none.</li>
-  <li><strong>Stethoscope cross-check readings</strong> &mdash; optional manual auscultation values attached to any automated reading, with a three-tier congruence classification (congruent, moderate difference, significant difference) to help patients and providers spot cuff calibration issues.</li>
-  <li><strong>Medications</strong>: name, dose, schedule, with one-tap check-off at each reading. Adherence history surfaces in the clinical report.</li>
-  <li><strong>Cardiac events</strong>: ER visits, chest pain episodes, diagnoses, medication changes &mdash; logged with date, time, severity, and notes.</li>
-</ul>
-
 <h2>The clinical report</h2>
-<p>The Report tab generates a standalone HTML document that patients can print, save as PDF, or share directly:</p>
+<p>The Report tab produces the artifact a cardiologist actually receives &mdash; printable, saveable as PDF, or forwardable ahead of an appointment. Everything else in the app is in service of making this report complete, accurate, and readable.</p>
 <ul>
   <li><strong>BP trend line charts</strong> (systolic + diastolic, with AHA reference lines at 120 and 140 mmHg).</li>
-  <li><strong>Pulse trend</strong> alongside, on the same time axis.</li>
-  <li><strong>AHA category distribution</strong> (how many readings in each band).</li>
+  <li><strong>Pulse trend</strong> on the same time axis.</li>
+  <li><strong>AHA category distribution</strong> &mdash; how readings fall across the bands over the reporting period.</li>
   <li><strong>Stethoscope cross-check table</strong>, with divergence flags where cuff and manual readings disagree.</li>
   <li><strong>Cardiac events table</strong>, ordered chronologically.</li>
   <li><strong>Medication adherence summary</strong>.</li>
   <li>All charts are SVG, rendered without external dependencies &mdash; works offline and prints cleanly.</li>
 </ul>
 
-<h2>How patients use it</h2>
+<h2>What goes into the report</h2>
+<p>Every reading is captured with the context that makes it clinically interpretable &mdash; not just numbers, but numbers attached to body position, concurrent symptoms, and the medications taken at the time.</p>
 <ul>
-  <li><strong>Runs on any phone, tablet, or desktop</strong> &mdash; it's a progressive web app, no app store.</li>
-  <li><strong>Installs from the browser</strong> to the home screen or taskbar with one tap.</li>
-  <li><strong>Works offline</strong> after the first install &mdash; a full service worker pre-caches the app for offline use.</li>
-  <li><strong>Optional guided setup interview</strong> walks a new patient through their devices, default reading arm, which metrics they want to track, and their medication status. Skippable for patients who prefer to configure later.</li>
-  <li><strong>Demo mode, on by default</strong>, shows 30 days of realistic sample data from a hypothetical hypertensive patient. Lets patients (and their providers) explore the app without any data entry. Fully isolated from real data.</li>
+  <li><strong>Blood pressure</strong> (systolic / diastolic), pulse, SpO<sub>2</sub>, and weight &mdash; every reading classified by American Heart Association categories with clear color coding.</li>
+  <li><strong>Context for every reading</strong>: reading arm, body position (sitting, standing, lying down, reclining), category (standard, morning, evening, post-exercise, test).</li>
+  <li><strong>Symptoms at the time of reading</strong>: chest pain, dizziness, fatigue, shortness of breath, palpitations, headache, nausea, swelling, or none.</li>
+  <li><strong>Stethoscope cross-check readings</strong> &mdash; optional manual auscultation values attached to any automated reading, with a three-tier congruence classification (congruent, moderate difference, significant difference) to help spot cuff calibration issues.</li>
+  <li><strong>Medications</strong>: name, dose, schedule, with one-tap check-off at each reading. Adherence history surfaces in the clinical report.</li>
+  <li><strong>Cardiac events</strong>: ER visits, chest pain episodes, diagnoses, medication changes &mdash; logged with date, time, severity, and notes.</li>
+</ul>
+
+<h2>Why patients will use it</h2>
+<p>The report only matters if patients actually log readings between appointments. The app is designed to be low-friction from day one, with optional support for consistency over months.</p>
+<ul>
+  <li><strong>Demo mode, on by default</strong>, shows 30 days of realistic sample data from a hypothetical hypertensive patient. New patients (and their providers) can explore the full workflow before entering anything real. Fully isolated from real data.</li>
+  <li><strong>Optional guided setup interview</strong> walks a new patient through their devices, default reading arm, which metrics they want to track, and their medication status. Skippable.</li>
+  <li><strong>Timer reminders</strong> for readings and medication doses, with selectable alarm sounds. Patients can upload their own audio if they prefer a familiar tone.</li>
+  <li><strong>Streak tracking and badges</strong> &mdash; gentle reinforcement for consistent logging. Adjustable intensity (Low, Medium, High) or fully disabled; the gamification layer never gates data access.</li>
+  <li><strong>In-app Help tab and optional AI Help Bot</strong> for usage questions.</li>
+  <li><strong>Runs on any phone, tablet, or desktop</strong> &mdash; installs from the browser to the home screen or taskbar in one tap, works offline after first install, no app store required.</li>
   <li><strong>CSV export</strong> for data portability.</li>
 </ul>
 
-<h2>Optional engagement features</h2>
-<ul>
-  <li><strong>Streak tracking and badges</strong> &mdash; gentle reinforcement for consistent logging. Adjustable intensity (Low, Medium, High) or fully disabled; the gamification layer never gates data access.</li>
-  <li><strong>Timer reminders</strong> &mdash; configurable alerts for readings and medication doses, with selectable alarm sounds. Patients can upload their own audio files if they prefer a familiar tone.</li>
-  <li><strong>In-app Help tab</strong> &mdash; feature guides written in plain language.</li>
-  <li><strong>AI Help Bot</strong> &mdash; optional chat assistant that answers questions about how to use the app.</li>
-</ul>
-
 <h2>Provider-controlled features</h2>
-<p>The following features are designed to be enabled or disabled by the patient's healthcare provider:</p>
+<p>The following features are designed to be enabled or disabled by the patient's healthcare provider.</p>
 <ul>
   <li><strong>Movement module</strong> <span class="available">Available now</span><br>Eleven cardiac-safe exercises for patients managing or recovering from cardiac conditions, with per-exercise guidance and safety notes.</li>
   <li><strong>Medication import from MyChart</strong> <span class="available">Available now</span><br>Patient copies their medication list from their Epic MyChart patient portal and pastes it into the app. A parser extracts medication name, dose, frequency, and common name, auto-detects cardiac-relevant medications, and presents a review screen where the patient can check or uncheck each entry before importing. Eliminates hand-entry of medications already recorded in the health system.</li>
   <li><strong>Bluetooth device integration</strong> <span class="upon-request">Upon request</span><br>Reads blood pressure, pulse, and SpO<sub>2</sub> directly from home cardiac devices that expose their data over Bluetooth Low Energy (BLE). The BLE transport is implemented and functional; most consumer cardiac devices today use proprietary protocols locked to manufacturer apps, so the pool of truly interoperable BLE devices is limited but expanding. Activated per partner agreement.</li>
 </ul>
 
-<div class="athena"><strong>Athena &mdash; companion app for practitioners.</strong> Healthy Heart is designed to integrate with Athena, a separate app. Athena gives providers a way to contribute their clinical judgment &mdash; individually or as a group &mdash; into a structured form that Healthy Heart can surface as specific suggestions for patients whose providers participate. The scope of a provider "group" is configurable.</div>
+<div class="athena"><strong>Athena &mdash; a separate companion app for practitioners.</strong> Athena is a separate app, under development, designed to collect structured clinical recommendations from cardiologists and other providers &mdash; capturing a range of viewpoints on how common cardiac patterns should be interpreted. Healthy Heart is designed to surface those recommendations to patients whose providers participate, with configurable scope for what constitutes a provider "group."</div>
 
 <div class="privacy"><strong>Where data lives.</strong> All health information &mdash; readings, medications, events, weight, SpO<sub>2</sub>, stethoscope cross-checks &mdash; is stored <strong>locally on the patient's device</strong>. None of it is transmitted to any server. The one exception is the AI Help Bot: questions typed into the Help Bot are sent to an AI service to generate a response, but health data is never included in those requests. No accounts, no sign-in, no cloud sync.</div>
 
-<div class="status"><strong>Current status.</strong> Healthy Heart is an early-stage prototype under active development. The app is complete enough to use day-to-day and to demonstrate the clinical-report workflow. <strong>This project is actively looking for clinical sponsorship</strong> to shape its future development &mdash; including the Athena integration, the provider-controlled features described above, and the scope and governance of the provider feedback.</div>
+<div class="status"><strong>Current status.</strong> Healthy Heart is a working prototype, validated on iOS and Android, under active development. The app is complete enough to use day-to-day and to demonstrate the clinical-report workflow. <strong>This project is actively looking for clinical sponsorship</strong> to shape its future development &mdash; including the Athena integration, the provider-controlled features described above, and the scope and governance of the provider feedback.</div>
 
 <a class="cta" href="https://abmeapps.github.io/HeartHealthy/">Try Healthy Heart</a>
 <a class="cta secondary" href="https://abmeapps.github.io/info/install-hearthealthy.html">Install guide</a>
