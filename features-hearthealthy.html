@@ -3,48 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Healthy Heart Features — A Better Me Apps</title>
-
+<title>Healthy Heart — Features — A Better Me Apps</title>
 <style>
-  body { font-family: 'Times New Roman', Georgia, serif; max-width: 680px; margin: 40px auto; padding: 0 24px; color: #334155; line-height: 1.7; }
-  h1 { color: #1E3A5F; font-size: 26px; margin-bottom: 4px; }
-  h2 { color: #1E3A5F; font-size: 20px; margin-top: 28px; }
-  .tagline { color: #1F4D78; font-style: italic; font-size: 18px; margin-bottom: 24px; }
-  .updated { color: #64748B; font-size: 14px; margin-bottom: 24px; }
-  p { margin: 10px 0; }
-  li { margin: 6px 0; }
-  a { color: #2563EB; }
-  .cta { display: inline-block; background: #1E3A5F; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 18px; margin: 20px 0; }
-  .cta:hover { background: #2a4f7a; }
-  .note { background: #F1F5F9; border-left: 4px solid #1E3A5F; padding: 12px 16px; margin: 16px 0; font-size: 15px; }
-  .stop { color: #64748B; font-size: 13px; margin-top: 32px; border-top: 1px solid #E2E8F0; padding-top: 12px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #1f2937;
+    background: #f8fafc;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  h1 { font-size: 32px; font-weight: 800; color: #7F1D1D; margin: 0 0 4px; letter-spacing: -0.5px; }
+  .tagline { font-size: 16px; color: #64748b; margin: 0 0 24px; }
+  h2 { font-size: 22px; font-weight: 700; color: #1f2937; margin: 32px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #fee2e2; }
+  h3 { font-size: 17px; font-weight: 700; color: #1f2937; margin: 20px 0 8px; }
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 24px; }
+  li { margin-bottom: 6px; }
+  strong { color: #1f2937; }
+  .cta { display: inline-block; background: #DC2626; color: #fff; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; margin: 8px 0 16px; }
+  .cta:hover { background: #B91C1C; }
+  .cta.secondary { background: #fff; color: #DC2626; border: 2px solid #DC2626; padding: 10px 22px; margin-left: 8px; }
+  .cta.secondary:hover { background: #fee2e2; }
+  .hero {
+    background: linear-gradient(135deg, #fff5f0, #fff);
+    border: 1px solid #fee2e2;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 20px 0 24px;
+    font-size: 16px;
+    color: #1f2937;
+  }
+  .hero strong { color: #7F1D1D; }
+  .qr-block { display: flex; align-items: center; gap: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 20px 0 24px; }
+  .qr-block img { width: 160px; height: auto; flex-shrink: 0; border-radius: 4px; background: #fff; }
+  .qr-block .qr-text { font-size: 14px; color: #475569; line-height: 1.5; }
+  .qr-block .qr-text strong { color: #1f2937; display: block; margin-bottom: 4px; font-size: 15px; }
+  @media (max-width: 520px) {
+    .qr-block { flex-direction: column; text-align: center; }
+    .qr-block img { width: 200px; }
+  }
+  .privacy { background: #f0fdf4; border-left: 4px solid #10b981; padding: 12px 14px; margin: 24px 0; border-radius: 4px; font-size: 14px; }
+  .athena { background: #faf5ff; border-left: 4px solid #8B5CF6; padding: 16px 18px; margin: 24px 0; border-radius: 4px; font-size: 15px; }
+  .athena strong { color: #6D28D9; }
+  .status { background: #f8fafc; border-left: 4px solid #64748b; padding: 12px 14px; margin: 20px 0; border-radius: 4px; font-size: 14px; color: #475569; }
+  .status strong { color: #1f2937; }
+  .planned { font-size: 12px; font-weight: 600; color: #92400e; background: #fef3c7; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .available { font-size: 12px; font-weight: 600; color: #14532d; background: #dcfce7; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  .upon-request { font-size: 12px; font-weight: 600; color: #1e40af; background: #dbeafe; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+  footer { text-align: center; color: #94a3b8; font-size: 13px; padding: 20px; margin-top: 20px; }
+  footer a { color: #64748b; text-decoration: none; margin: 0 6px; }
+  footer a:hover { text-decoration: underline; }
+  .copyright { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 8px; }
 </style>
 </head>
 <body>
+<main>
 
-<h1>Healthy Heart v0.9.0</h1>
-<div class="tagline">Cardiac Health Tracker</div>
+<h1>Healthy Heart</h1>
+<p class="tagline">Cardiac health tracker &mdash; built for patients, readable by clinicians.</p>
 
-<ul>
-<li>Every BP reading instantly classified by AHA standards with color coding.</li>
-<li>Tracks blood pressure, pulse, oxygen saturation, weight, symptoms, and body position.</li>
-<li>One-tap medication check-off with adherence history. Reports show which meds were taken and when.</li>
-<li>Bluetooth reads directly from a BP cuff — no manual entry, no transcription errors.</li>
-<li>Visual trend charts show whether a treatment plan is working over weeks.</li>
-<li>An optional AI Help Assistant answers questions inside the app. An interpretation engine flags patterns for providers.</li>
-</ul>
+<div class="hero"><strong>Value proposition.</strong> Patients arrive at appointments with a professional clinical report &mdash; trend charts, medication adherence, symptom history &mdash; instead of handwritten notes or nothing at all. The report can also be forwarded ahead of an appointment as a springboard for discussion.</div>
 
-<p><strong>Patients arrive at appointments with a professional clinical report instead of handwritten notes.</strong></p>
+<p>Healthy Heart is a self-contained web app for cardiac health self-tracking. Patients log blood pressure, pulse, oxygen saturation, weight, symptoms, medications, and cardiac events. The app classifies every reading against AHA standards, tracks trends over time, and generates a clinical report that patients can share at appointments, or forward prior to an appointment as a springboard for discussion.</p>
 
 <a class="cta" href="https://abmeapps.github.io/HeartHealthy/">Try Healthy Heart</a>
+<a class="cta secondary" href="https://abmeapps.github.io/info/install-hearthealthy.html">Install guide</a>
 
-<div class="note">
-Healthy Heart is a prototype under active development. It works on any phone, tablet, or PC. All data stays on your device — nothing is sent to a server. Install it directly from your browser with no app store required.
+<div class="qr-block">
+  <img src="HealthyHeart-install-QR.png" alt="QR code for Healthy Heart install page">
+  <div class="qr-text">
+    <strong>Scan to explore.</strong>
+    Point your phone camera at this code to open the install guide. Use it to install the app on your own phone for evaluation, and share the same link with patients for their feedback.
+  </div>
 </div>
 
-<p>For install directions, visit <a href="https://abmeapps.github.io/info/install-hearthealthy.html">the install guide</a>.</p>
+<h2>What patients can log</h2>
+<ul>
+  <li><strong>Blood pressure</strong> (systolic / diastolic), pulse, SpO<sub>2</sub>, and weight &mdash; every reading classified by American Heart Association categories with clear color coding.</li>
+  <li><strong>Context for every reading</strong>: reading arm, body position (sitting, standing, lying down, reclining), category (standard, morning, evening, post-exercise, test).</li>
+  <li><strong>Symptoms at the time of reading</strong>: chest pain, dizziness, fatigue, shortness of breath, palpitations, headache, nausea, swelling, or none.</li>
+  <li><strong>Stethoscope cross-check readings</strong> &mdash; optional manual auscultation values attached to any automated reading, with a three-tier congruence classification (congruent, moderate difference, significant difference) to help patients and providers spot cuff calibration issues.</li>
+  <li><strong>Medications</strong>: name, dose, schedule, with one-tap check-off at each reading. Adherence history surfaces in the clinical report.</li>
+  <li><strong>Cardiac events</strong>: ER visits, chest pain episodes, diagnoses, medication changes &mdash; logged with date, time, severity, and notes.</li>
+</ul>
 
-<p class="stop">A Better Me Apps &middot; <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> &middot; <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> &middot; Contact: info@max-opp.com</p>
+<h2>The clinical report</h2>
+<p>The Report tab generates a standalone HTML document that patients can print, save as PDF, or share directly:</p>
+<ul>
+  <li><strong>BP trend line charts</strong> (systolic + diastolic, with AHA reference lines at 120 and 140 mmHg).</li>
+  <li><strong>Pulse trend</strong> alongside, on the same time axis.</li>
+  <li><strong>AHA category distribution</strong> (how many readings in each band).</li>
+  <li><strong>Stethoscope cross-check table</strong>, with divergence flags where cuff and manual readings disagree.</li>
+  <li><strong>Cardiac events table</strong>, ordered chronologically.</li>
+  <li><strong>Medication adherence summary</strong>.</li>
+  <li>All charts are SVG, rendered without external dependencies &mdash; works offline and prints cleanly.</li>
+</ul>
 
+<h2>How patients use it</h2>
+<ul>
+  <li><strong>Runs on any phone, tablet, or desktop</strong> &mdash; it's a progressive web app, no app store.</li>
+  <li><strong>Installs from the browser</strong> to the home screen or taskbar with one tap.</li>
+  <li><strong>Works offline</strong> after the first install &mdash; a full service worker pre-caches the app for offline use.</li>
+  <li><strong>Optional guided setup interview</strong> walks a new patient through their devices, default reading arm, which metrics they want to track, and their medication status. Skippable for patients who prefer to configure later.</li>
+  <li><strong>Demo mode, on by default</strong>, shows 30 days of realistic sample data from a hypothetical hypertensive patient. Lets patients (and their providers) explore the app without any data entry. Fully isolated from real data.</li>
+  <li><strong>CSV export</strong> for data portability.</li>
+</ul>
+
+<h2>Optional engagement features</h2>
+<ul>
+  <li><strong>Streak tracking and badges</strong> &mdash; gentle reinforcement for consistent logging. Adjustable intensity (Low, Medium, High) or fully disabled; the gamification layer never gates data access.</li>
+  <li><strong>Timer reminders</strong> &mdash; configurable alerts for readings and medication doses, with selectable alarm sounds. Patients can upload their own audio files if they prefer a familiar tone.</li>
+  <li><strong>In-app Help tab</strong> &mdash; feature guides written in plain language.</li>
+  <li><strong>AI Help Bot</strong> &mdash; optional chat assistant that answers questions about how to use the app.</li>
+</ul>
+
+<h2>Provider-controlled features</h2>
+<p>The following features are designed to be enabled or disabled by the patient's healthcare provider through the Athena companion app described below:</p>
+<ul>
+  <li><strong>Movement module</strong> <span class="available">Available now</span><br>11 cardiac-safe exercises for patients managing or recovering from cardiac conditions, with per-exercise guidance and safety notes.</li>
+  <li><strong>Medication import from MyChart</strong> <span class="available">Available now</span><br>Patient copies their medication list from their Epic MyChart patient portal and pastes it into the app. A parser extracts medication name, dose, frequency, and common name, auto-detects cardiac-relevant medications, and presents a review screen where the patient can check or uncheck each entry before importing. Eliminates hand-entry of medications already recorded in the health system.</li>
+  <li><strong>Bluetooth device integration</strong> <span class="upon-request">Upon request</span><br>Reads blood pressure, pulse, and SpO<sub>2</sub> directly from home cardiac devices that expose their data over Bluetooth Low Energy (BLE). The BLE transport is implemented and functional; most consumer cardiac devices today use proprietary protocols locked to manufacturer apps, so the pool of truly interoperable BLE devices is limited but expanding. Activated per partner agreement.</li>
+</ul>
+
+<div class="athena"><strong>Athena &mdash; companion app for practitioners.</strong> Healthy Heart is designed to integrate with Athena, a separate app for healthcare providers. Athena gives providers a way to contribute their clinical judgment &mdash; individually or as a group &mdash; into a structured form that Healthy Heart can surface as specific suggestions for patients whose providers participate. The scope of a provider "group" is configurable to a partner organization's needs, from a single practice up to larger networks.</div>
+
+<div class="privacy"><strong>Where data lives.</strong> All health information &mdash; readings, medications, events, weight, SpO<sub>2</sub>, stethoscope cross-checks &mdash; is stored <strong>locally on the patient's device</strong>. None of it is transmitted to any server. The one exception is the AI Help Bot: questions typed into the Help Bot are sent to an AI service to generate a response, but health data is never included in those requests. No accounts, no sign-in, no cloud sync.</div>
+
+<div class="status"><strong>Current status.</strong> Healthy Heart is an early-stage prototype under active development. The app is complete enough to use day-to-day and to demonstrate the clinical-report workflow. <strong>This project is actively looking for clinical sponsorship</strong> to shape its future development &mdash; including the Athena integration, the provider-controlled features described above, and the scope and governance of the provider feedback that flows through it.</div>
+
+<a class="cta" href="https://abmeapps.github.io/HeartHealthy/">Try Healthy Heart</a>
+<a class="cta secondary" href="https://abmeapps.github.io/info/install-hearthealthy.html">Install guide</a>
+
+<footer>
+  A Better Me Apps &middot;
+  <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> &middot;
+  <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> &middot;
+  Contact: <a href="mailto:info@max-opp.com">info@max-opp.com</a>
+</footer>
+<p class="copyright">Copyright &copy; 2026 Alan H. Jordan. All rights reserved.</p>
+
+</main>
 </body>
 </html>
