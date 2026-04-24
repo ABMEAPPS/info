@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Independence — Features — A Better Me Apps</title>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --muted: #444;
+    --accent: #4a6fa5;
+    --rule: #dde;
+    --bg: #fff;
+    --max: 720px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; }
+
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .tagline { font-size: 1.05rem; color: var(--muted); font-style: italic; margin-bottom: 1.5rem; }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 2.2rem 0 0.6rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  p { margin-bottom: 0.9rem; }
+
+  ul { margin: 0.4rem 0 0.9rem 1.4rem; }
+  ul li { margin-bottom: 0.4rem; }
+
+  strong { font-weight: 700; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.2rem 0; }
+  .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.45rem 1.1rem;
+    border-radius: 4px;
+    font-family: system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .cta:hover { opacity: 0.88; text-decoration: none; }
+  .cta.secondary {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .qr-block { margin: 1.5rem 0; }
+  .qr-block img { display: block; width: 148px; height: 148px; }
+  .qr-caption { font-family: system-ui, sans-serif; font-size: 0.82rem; color: var(--muted); margin-top: 0.4rem; }
+
+  .badge {
+    display: inline-block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    background: #e8f0fb;
+    color: var(--accent);
+  }
+
+  .screenshot-block {
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .screenshot-block img {
+    width: 260px;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+    display: block;
+  }
+  .screenshot-caption {
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 340px;
+    margin: 0;
+  }
+
+  .note {
+    background: #f6f7fb;
+    border-left: 3px solid var(--rule);
+    padding: 0.7rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Personal Independence</h1>
+  <p class="tagline">Bladder-health diary — built for patients, readable by urologists.</p>
+
+  <p><strong>Value proposition.</strong> Patients arrive at urology appointments with a complete voiding diary and neuromodulation program history — void timing, volumes, fluid intake, urgency, and stimulation adjustments — instead of a blank three-day paper diary filled out the morning of the visit. The report can also be forwarded ahead of an appointment as a springboard for clinical discussion.</p>
+
+  <p>Personal Independence is a self-contained web app for bladder-health self-tracking, designed to help patients manage overactive bladder by turning their daily experience into something measurable. Patients log voids (time, volume, urgency, accidents, nocturia), fluid intake, and neuromodulation stimulation-program changes. The app converts those entries into easy-to-read trend charts — showing voiding frequency, volume patterns, fluid-intake correlation, and how urgency episodes distribute across the day — so that both patient and clinician can see at a glance what is changing and what is not.</p>
+
+  <div class="cta-row">
+    <a class="cta" href="https://abmeapps.github.io/PI">Try Personal Independence</a>
+    <a class="cta secondary" href="install-pi.html">Install guide</a>
+  </div>
+
+  <div class="qr-block">
+    <img src="PI-features-QR.png" alt="QR code for Personal Independence features page">
+    <p class="qr-caption"><strong>Scan to explore.</strong> Point your phone camera at this code to open this page and share it with colleagues.</p>
+  </div>
+
+  <h2>The clinical report</h2>
+
+  <p>The Report tab produces the artifact a urologist can actually read — printable, saveable as PDF, or forwardable ahead of an appointment. Everything else in the app is in service of making this report complete, accurate, and legible.</p>
+
+  <ul>
+    <li><strong>Voiding pattern charts</strong> — void frequency and volume over time, with trend lines.</li>
+    <li><strong>Fluid intake overlay</strong> — intake volume correlated with voiding pattern across the same time axis.</li>
+    <li><strong>Void-type breakdown</strong> — proportions of normal voids, urgency episodes, accidents, and nocturia events over the reporting period.</li>
+    <li><strong>Neuromodulation program history table</strong> — stimulation amplitude (mA) by program stage, with date of each change and clinical notes.</li>
+    <li><strong>Summary statistics</strong> — average void frequency per day, average volume, nocturia episodes per night, accident rate.</li>
+    <li>All charts are SVG, rendered without external dependencies — works offline and prints cleanly.</li>
+  </ul>
+
+  <div class="screenshot-block">
+    <img src="PI-screenshot-charts.png" alt="Personal Independence report charts — daily volume with mA overlay, daily voids and night wakes, fluid in vs void out, and average urge resolution">
+    <p class="screenshot-caption">The report's Charts section on an iPhone — daily volume correlated with stimulation amplitude, void frequency and nocturia, fluid intake vs void output, and urge resolution over a 16-day period.</p>
+  </div>
+
+  <h2>What goes into the report</h2>
+
+  <p>Every entry is captured with the context that makes it clinically useful — not just a timestamp, but a complete picture of what the patient was experiencing and managing at the time.</p>
+
+  <ul>
+    <li><strong>Voids</strong> — time, estimated or measured volume (ml), and a type classification: normal void, urgency void, accident, or nocturia. Volume presets (Small 50 ml through XXL 500 ml) make entry fast.</li>
+    <li><strong>Fluid intake</strong> — beverage type, volume, and optional notes (e.g., caffeinated, alcoholic). Intake is timestamped and shown alongside voids in the report.</li>
+    <li><strong>Neuromodulation / stimulation program history</strong> — amplitude (mA) per program stage, with date, program designation (P1–P4 or custom), and free-text clinical notes for each adjustment. Designed for patients on sacral neuromodulation and other implanted neurostimulation therapies.</li>
+    <li><strong>Void notes</strong> — free text attached to any individual void entry for patient-reported context.</li>
+  </ul>
+
+  <h2>Why patients will use it</h2>
+
+  <p>A voiding diary only has clinical value if patients log faithfully between appointments — not just the day before. The app is designed for low-friction daily use, with optional features that support consistency over weeks and months.</p>
+
+  <ul>
+    <li><strong>Demo mode, on by default</strong>, shows 16 days of realistic sample data — voids, intake, and a true clinical stimulation-program narrative (amplitude starting at 1.8 mA, four program transitions, settling at 0.3 mA). New patients and their providers can explore the full workflow before entering anything real. Fully isolated from real data.</li>
+    <li><strong>Streak tracking and achievement badges</strong> — gentle reinforcement for consistent logging. Fifteen PI-specific achievements (first log, 7-day and 30-day streaks, accident-free week, program documenter, and more). Adjustable or fully disabled; the gamification layer never gates data access.</li>
+    <li><strong>In-app Help tab and optional AI Help Bot</strong> for usage questions. The bot explicitly declines to offer medical advice.</li>
+    <li><strong>Runs on any phone, tablet, or desktop</strong> — installs from the browser to the home screen or taskbar in one tap, works offline after first install, no app store required.</li>
+    <li><strong>CSV export</strong> — voiding log, intake log, and stimulation history, all exportable separately for data portability or backup.</li>
+    <li><strong>Emergency export</strong> — if device storage fails, three one-tap exports pull data directly from app memory so nothing is lost.</li>
+  </ul>
+
+  <h2>Provider-controlled features</h2>
+
+  <p>The following features are designed to be configured by the patient's healthcare provider or practice.</p>
+
+  <ul>
+    <li><strong>Practice identity</strong> <span class="badge">Available now</span><br>
+      Provider name, logo, contact information, and a brief practice descriptor appear in the generated clinical report — making the report legible as coming from a specific practice context.</li>
+    <li><strong>Gamification configuration</strong> <span class="badge">Available now</span><br>
+      Achievement tracking and streak reinforcement can be enabled, configured, or disabled at the provider level. Practices that prefer a clinical-only experience can suppress the gamification layer entirely.</li>
+    <li><strong>Help Bot capacity override</strong> <span class="badge">Available now</span><br>
+      The AI Help Bot defaults to a 10-question lifetime cap per install. Providers can issue a signed override code to raise or reset that cap for a specific patient without requiring account creation or network sync.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Sister app: Healthy Heart.</strong> Personal Independence shares infrastructure with Healthy Heart, A Better Me Apps' cardiac health tracker. Both apps use the same offline-first PWA architecture, the same Help Bot backend, and the same gamification engine. Practices managing patients with both cardiac and urological conditions can deploy both apps with a consistent patient experience.
+  </div>
+
+  <h2>Where data lives</h2>
+
+  <p>All patient information — voids, intake, stimulation history — is stored <strong>locally on the patient's device</strong>. None of it is transmitted to any server. The one exception is the AI Help Bot: questions typed into the Help Bot are sent to an AI service to generate a response, but health data is never included in those requests. No accounts, no sign-in, no cloud sync.</p>
+
+  <h2>Current status</h2>
+
+  <p>Personal Independence is a working application, validated on iOS and Android, under active development. The app is complete enough for daily patient use and to demonstrate the clinical-report workflow to prospective clinical partners. <strong>This project is actively seeking clinical sponsorship</strong> to shape its future development — including deeper neuromodulation-specific features, provider feedback integration, and expanded platform partnerships.</p>
+
+  <p><strong>Athena — a separate companion app for practitioners.</strong> Athena is a separate app, under development, designed to collect structured clinical recommendations from urologists, surgeons, and other providers — capturing a range of viewpoints on how bladder patterns should be interpreted. Personal Independence is designed to surface those recommendations to patients whose providers participate, with configurable scope for what constitutes a provider "group."</p>
+
+  <div class="cta-row">
+    <a class="cta" href="https://abmeapps.github.io/PI">Try Personal Independence</a>
+    <a class="cta secondary" href="install-pi.html">Install guide</a>
+  </div>
+
+  <div class="qr-block">
+    <img src="PI-install-QR.png" alt="QR code for Personal Independence install page">
+    <p class="qr-caption"><strong>Scan to install.</strong> Point your phone camera at this code to install Personal Independence on your own device for evaluation, and share the same link with patients.</p>
+  </div>
+
+  <footer>
+    A Better Me Apps ·
+    <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> ·
+    <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> ·
+    Contact: <a href="mailto:info@max-opp.com">info@max-opp.com</a><br>
+    Copyright &copy; 2026 Alan H. Jordan. All rights reserved.
+  </footer>
+
+</div>
+</body>
+</html>
