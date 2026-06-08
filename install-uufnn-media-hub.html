@@ -34,7 +34,6 @@
       font-size: 16px;
     }
 
-    /* ── Header ── */
     .page-header {
       background: linear-gradient(135deg, var(--navy3) 0%, var(--navy) 60%, var(--navy2) 100%);
       color: #fff;
@@ -87,7 +86,6 @@
     }
     .open-btn:hover { background: var(--gold2); transform: translateY(-1px); }
 
-    /* ── Main content ── */
     .content {
       max-width: 720px;
       margin: 0 auto;
@@ -122,7 +120,6 @@
     li { margin-bottom: 7px; }
     li strong { color: var(--text); }
 
-    /* ── Info box ── */
     .info-box {
       background: #eef3fb;
       border-left: 4px solid var(--navy2);
@@ -145,7 +142,6 @@
     }
     .warn-box strong { color: #92400e; }
 
-    /* ── Platform cards ── */
     .platform-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -170,7 +166,6 @@
       font-size: 12px;
     }
 
-    /* ── Step callout ── */
     .step-note {
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -181,10 +176,28 @@
       margin: 14px 0;
     }
 
-    /* ── Divider ── */
+    figure {
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    figure img {
+      width: 100%;
+      display: block;
+    }
+    figcaption {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--text3);
+      font-style: italic;
+    }
+
     hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
 
-    /* ── Footer ── */
     footer {
       text-align: center;
       font-size: 12px;
@@ -194,7 +207,6 @@
     }
     footer a { color: var(--navy2); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
-
     a { color: var(--navy2); }
   </style>
 </head>
@@ -217,11 +229,11 @@
     <strong>Demo Mode is on by default.</strong> An amber banner at the top of the screen reads "🎭 Demo Mode." When you're ready to use the app for real, tap <strong>✕ Exit Demo</strong> on that banner. You can also toggle Demo Mode on and off anytime in the <strong>Settings</strong> tab.
   </div>
 
-  <p>Once you exit Demo Mode, you can add your real contacts (social media volunteers and traditional media contacts), compose an announcement, generate tailored versions for every channel with one tap, and distribute them directly from the app.</p>
+  <p>Once you exit Demo Mode, add your real contacts (social media volunteers and traditional media contacts), compose an announcement, generate tailored versions for every channel with one tap, and distribute them directly from the app.</p>
 
   <h2>How to install on your device</h2>
 
-  <p>UUFNN Media Hub is a <strong>Progressive Web App (PWA)</strong> — it installs directly from your browser with no app store required. Once installed, it works offline; an internet connection is needed only when generating announcements (which uses an AI service).</p>
+  <p>UUFNN Media Hub is a <strong>Progressive Web App (PWA)</strong> — it installs directly from your browser with no app store required. Once installed, it works offline; an internet connection is needed only when generating announcements.</p>
 
   <div class="platform-grid">
     <div class="platform-card">
@@ -234,7 +246,7 @@
     </div>
     <div class="platform-card">
       <div class="plat-name">💻 Windows / Mac</div>
-      <div class="plat-browser">Chrome or Edge</div>
+      <div class="plat-browser">Edge or Chrome recommended</div>
     </div>
     <div class="platform-card">
       <div class="plat-name">📗 Chromebook</div>
@@ -267,21 +279,45 @@
     <li>If Chrome shows an <strong>Install</strong> or <strong>Add to Home Screen</strong> prompt at the bottom of the screen, tap it.</li>
     <li>If no prompt appears: tap the <strong>three-dot menu (⋮)</strong> in the top-right corner, then tap <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</li>
     <li>Tap <strong>Install</strong> to confirm.</li>
-    <li>The UUFNN Media Hub icon appears on your home screen. If you don't see it, swipe up to open the app drawer and look there.</li>
+    <li>The UUFNN Media Hub icon appears on your home screen. If you don't see it immediately, swipe up to open the app drawer and look there.</li>
   </ol>
 
   <div class="step-note">
-    <strong>Two options may appear:</strong> "This app is already installed — click to open" and "Create shortcut." Choose <strong>This app is already installed</strong> for the full standalone experience (no browser bar). The shortcut option also works but keeps the Chrome address bar visible.
+    <strong>Two options may appear:</strong> "This app is already installed — click to open" and "Create shortcut." Choose <strong>This app is already installed</strong> for the full standalone experience without a browser bar. The shortcut option also works but keeps the browser address bar visible.
   </div>
 
-  <h3>Desktop (Windows, Mac, Chromebook)</h3>
+  <h3>Desktop — Windows or Mac (Edge or Chrome)</h3>
+
+  <div class="warn-box">
+    <strong>Use Microsoft Edge or Google Chrome.</strong> Firefox and Safari on desktop do not support installing Progressive Web Apps. Other Chromium-based browsers (such as Vivaldi or Brave) may work but their install prompts are less reliable — Edge or Chrome are recommended for the smoothest experience.
+  </div>
+
+  <p>The install button appears as a small icon at the <strong>right end of the address bar</strong>. In Edge it looks like a grid of small squares. In Chrome it looks like a monitor with a downward arrow. The screenshots below show exactly where to look and what to expect in Edge.</p>
+
+  <figure>
+    <img src="edge-addressbar.png" alt="Edge address bar with arrow pointing to the install icon at the far right">
+    <figcaption>The install icon (grid of squares) appears at the far right of the Edge address bar.</figcaption>
+  </figure>
 
   <ol>
-    <li>Open UUFNN Media Hub in <strong>Chrome</strong> or <strong>Edge</strong>. Firefox and Safari on desktop do not currently support installing Progressive Web Apps.</li>
-    <li>Look for a small <strong>install icon</strong> in the address bar — typically a monitor with a downward arrow, or a circle with a plus sign.</li>
-    <li>Click it and confirm the installation.</li>
-    <li>The app appears in your system's app launcher, Start menu, or Applications folder, and can be pinned to the dock or taskbar.</li>
+    <li>Open UUFNN Media Hub in <strong>Edge</strong> or <strong>Chrome</strong>.</li>
+    <li>Look for the <strong>install icon</strong> at the far right of the address bar — a small grid of squares in Edge, or a monitor with a downward arrow in Chrome.</li>
+    <li>Click it. An install dialog appears showing the app name, icon, and publisher.</li>
+    <li>Click <strong>Install</strong> to confirm.</li>
   </ol>
+
+  <figure>
+    <img src="edge-dialog.png" alt="Edge install dialog showing Install UUFNN Media Hub app with an Install button">
+    <figcaption>The Edge install dialog — click Install to add the app to your Start menu and taskbar.</figcaption>
+  </figure>
+
+  <div class="step-note">
+    <strong>After installing</strong>, the app appears in your Windows Start menu and can be pinned to your taskbar or desktop. To pin it: open the Start menu, find UUFNN Media Hub, right-click it, and choose <strong>Pin to taskbar</strong> or <strong>Pin to Start</strong>.
+  </div>
+
+  <div class="step-note">
+    <strong>Don't see the install icon?</strong> The app may already be installed — check your Start menu or Applications folder before trying anything else. If it is already installed, the browser menu will show an "Open in app" option instead.
+  </div>
 
   <hr>
 
@@ -305,7 +341,7 @@
     <li>To also clear stored data: open Chrome → three-dot menu → <strong>Settings</strong> → <strong>Site Settings</strong> → <strong>All Sites</strong> → find <code>abmeapps.github.io</code> → <strong>Clear &amp; Reset</strong>.</li>
   </ol>
 
-  <h3>Desktop</h3>
+  <h3>Desktop (Windows or Mac)</h3>
   <ol>
     <li>Open the installed UUFNN Media Hub app.</li>
     <li>Click the <strong>three-dot menu</strong> in the app's title bar and select <strong>Uninstall UUFNN Media Hub</strong>.</li>
