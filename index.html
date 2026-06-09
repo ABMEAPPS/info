@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<!--
+  UUFNN Media Hub
+  Copyright © 2026 Alan H. Jordan. All Rights Reserved.
+  Unauthorized reproduction or distribution is prohibited.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f2d5e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Media Hub">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>UUFNN Media Hub</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue-900: #0a1f42; --blue-800: #0f2d5e; --blue-700: #1a3f7a;
+      --blue-600: #1e4f9c; --blue-400: #3b7dd8; --blue-200: #93c5fd;
+      --blue-100: #dbeafe; --blue-50: #eff6ff;
+      --amber: #F59E0B; --amber-lt: #FCD34D;
+      --bg: #f8fafc; --bg2: #f1f5f9; --bg3: #e2e8f0;
+      --text: #0f172a; --text2: #475569; --text3: #94a3b8;
+      --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.18);
+      --radius: 10px; --radius-lg: 14px;
+      --shadow: 0 1px 4px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(0,0,0,0.06);
+      --err-bg: #fef2f2; --err-text: #991b1b; --err-border: #fca5a5;
+      --warn-bg: #fffbeb; --warn-text: #92400e; --warn-border: #fcd34d;
+      --ok-bg: #f0fdf4; --ok-text: #166534; --ok-border: #86efac;
+      --info-bg: #eff6ff; --info-text: #1e40af; --info-border: #93c5fd;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#0f172a; --bg2:#1e293b; --bg3:#334155;
+        --text:#f1f5f9; --text2:#94a3b8; --text3:#475569;
+        --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.15);
+        --err-bg:#3b0a0a; --err-text:#fca5a5; --err-border:#991b1b;
+        --warn-bg:#3b2a00; --warn-text:#fcd34d; --warn-border:#92400e;
+        --ok-bg:#052e16; --ok-text:#86efac; --ok-border:#166534;
+        --info-bg:#0c1a3b; --info-text:#93c5fd; --info-border:#1e40af;
+      }
+    }
+    html, body { height: 100%; width: 100%; overflow: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--blue-800); color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    #app { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ── Header ── */
+    .app-header {
+      background: var(--blue-800);
+      padding: 10px 16px;
+      padding-top: max(10px, env(safe-area-inset-top, 10px));
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .header-icon { width: 34px; height: 34px; flex-shrink: 0; }
+    .header-icon img { width: 34px; height: 34px; border-radius: 8px; }
+    .header-title { font-size: 17px; font-weight: 700; color: #fff; }
+    .header-sub   { font-size: 11px; color: var(--blue-200); }
+    .header-right { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+    .header-save  { font-size: 11px; color: var(--blue-200); display: flex; align-items: center; gap: 5px; }
+    .save-dot { width: 7px; height: 7px; border-radius: 50%; background: #86efac; flex-shrink: 0; }
+    .save-dot.unsaved { background: var(--amber); }
+    .header-ver { font-size: 10px; color: var(--blue-200); opacity: .5; }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      display: flex; background: var(--blue-900); flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1; min-width: 58px; padding: 9px 4px 7px; border: none; background: none;
+      color: var(--blue-200); font-size: 10px; font-weight: 500;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      border-bottom: 2px solid transparent; transition: all .15s;
+      font-family: inherit; white-space: nowrap;
+    }
+    .tab-btn .tab-icon { font-size: 17px; line-height: 1; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--amber); }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.05); }
+
+    /* ── Content area ── */
+    .tab-content { flex: 1; overflow-y: auto; background: var(--bg); -webkit-overflow-scrolling: touch; }
+    .tab-pane { display: none; padding: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0)); }
+    .tab-pane.active { display: block; }
+
+    /* ── Cards & layout ── */
+    .card {
+      background: var(--bg); border-radius: var(--radius-lg);
+      border: 0.5px solid var(--border); box-shadow: var(--shadow);
+      padding: 14px 16px; margin-bottom: 12px;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 600; color: var(--text3);
+      text-transform: uppercase; letter-spacing: .07em; margin: 16px 0 8px;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    /* ── Notices ── */
+    .notice {
+      font-size: 13px; padding: 10px 14px; border-radius: var(--radius);
+      margin-bottom: 10px; line-height: 1.5; border: 0.5px solid var(--border);
+      background: var(--bg2); color: var(--text2);
+    }
+    .notice.info    { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); }
+    .notice.warn    { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+    .notice.error   { background: var(--err-bg);  color: var(--err-text);  border-color: var(--err-border);  }
+    .notice.success { background: var(--ok-bg);   color: var(--ok-text);   border-color: var(--ok-border);   }
+    .notice.hidden  { display: none; }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 9px 16px; font-size: 14px; border-radius: var(--radius);
+      border: 0.5px solid var(--border2); background: var(--bg2);
+      color: var(--text); cursor: pointer; font-family: inherit;
+      font-weight: 500; transition: background .12s, opacity .12s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { background: var(--bg3); }
+    .btn.primary { background: var(--blue-700); color: #fff; border-color: var(--blue-600); }
+    .btn.primary:hover { background: var(--blue-600); }
+    .btn.success { background: #166534; color: #fff; border-color: #14532d; }
+    .btn.success:hover { background: #14532d; }
+    .btn.danger  { color: var(--err-text); border-color: var(--err-border); }
+    .btn.danger:hover  { background: var(--err-bg); }
+    .btn.sm { padding: 6px 12px; font-size: 12px; }
+    .btn.xs { padding: 4px 9px; font-size: 11px; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
+    .flex-end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+    /* ── Forms ── */
+    label { font-size: 12px; color: var(--text2); margin-bottom: 5px; display: block; font-weight: 500; }
+    label .req { color: var(--err-text); }
+    .form-group { margin-bottom: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+    input, textarea, select {
+      width: 100%; padding: 9px 11px; font-size: 14px;
+      border: 0.5px solid var(--border2); border-radius: var(--radius);
+      background: var(--bg); color: var(--text); font-family: inherit;
+      outline: none; transition: border-color .12s; -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--blue-400); }
+    input.err, textarea.err { border-color: var(--err-text) !important; background: var(--err-bg); }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+    .field-err { font-size: 11px; color: var(--err-text); margin-top: 4px; display: none; }
+    .field-err.show { display: block; }
+
+    /* ── Tags / platform pills ── */
+    .type-toggle { display: flex; border: 0.5px solid var(--border2); border-radius: var(--radius); overflow: hidden; width: 100%; margin-bottom: 12px; }
+    .type-btn { flex: 1; padding: 8px 10px; font-size: 13px; border: none; cursor: pointer; background: none; color: var(--text2); font-family: inherit; font-weight: 500; }
+    .type-btn.active { background: var(--blue-700); color: #fff; }
+    .platform-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 500;
+      cursor: pointer; border: 0.5px solid transparent;
+      white-space: nowrap; transition: opacity .15s; user-select: none;
+    }
+    .tag.unselected { opacity: .28; }
+    .tag.facebook    { background:#E6F1FB; color:#0C447C; border-color:#B5D4F4; }
+    .tag.instagram   { background:#FBEAF0; color:#72243E; border-color:#F4C0D1; }
+    .tag.x           { background:#f0f0ee; color:#1a1a18; border-color:#c8c8c4; }
+    .tag.bluesky     { background:#E6F1FB; color:#185FA5; border-color:#85B7EB; }
+    .tag.email       { background:#EAF3DE; color:#27500A; border-color:#C0DD97; }
+    .tag.bulletin    { background:#EEEDFE; color:#3C3489; border-color:#CECBF6; }
+    .tag.newspaper   { background:#f0f0ee; color:#2c2c2a; border-color:#B4B2A9; }
+    .tag.radio       { background:#FAEEDA; color:#854F0B; border-color:#EF9F27; }
+    .tag.tv          { background:#FCEBEB; color:#791F1F; border-color:#F09595; }
+    .tag.pressrelease{ background:#FAEEDA; color:#633806; border-color:#FAC775; }
+    .platform-picker { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; border: 0.5px solid var(--border2); border-radius: var(--radius); }
+    .platform-picker.err { border-color: var(--err-text); background: var(--err-bg); }
+
+    /* ── Contacts ── */
+    .contact-row { display: flex; align-items: flex-start; gap: 10px; }
+    .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .avatar.social { background: var(--info-bg); color: var(--info-text); }
+    .avatar.media  { background: var(--bg3);     color: var(--text2); }
+    .contact-name  { font-size: 14px; font-weight: 600; }
+    .contact-org   { font-size: 12px; color: var(--text2); font-style: italic; }
+    .contact-email { font-size: 12px; color: var(--text2); }
+    .demo-badge { font-size: 10px; color: var(--info-text); background: var(--info-bg); padding: 1px 6px; border-radius: 999px; margin-left: 5px; vertical-align: middle; }
+
+    /* ── Output blocks (generated content) ── */
+    .output-block {
+      background: var(--bg2); border-radius: var(--radius);
+      padding: 12px; font-size: 13px; line-height: 1.6;
+      white-space: pre-wrap; word-break: break-word;
+      border: 0.5px solid var(--border); margin-bottom: 4px;
+    }
+    .output-block[contenteditable="true"] {
+      outline: none; border-color: var(--blue-400);
+      background: var(--bg); box-shadow: 0 0 0 2px rgba(59,125,216,0.15);
+    }
+    .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+    .char-pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .char-pill.ok   { background: var(--ok-bg);  color: var(--ok-text); }
+    .char-pill.over { background: var(--err-bg); color: var(--err-text); }
+    .edit-badge { font-size: 10px; padding: 2px 7px; border-radius: 999px; background: var(--warn-bg); color: var(--warn-text); border: 0.5px solid var(--warn-border); font-weight: 600; }
+
+    /* ── Distribute ── */
+    .sel-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; margin-bottom: 6px; border: 0.5px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); cursor: pointer; }
+    .sel-row:hover { background: var(--bg2); }
+    .sel-row input[type=checkbox] { width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; accent-color: var(--blue-600); }
+    .sel-row-info { flex: 1; min-width: 0; }
+    .filter-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .filter-chip { padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--border2); background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .12s; white-space: nowrap; }
+    .filter-chip.active { background: var(--blue-700); color: #fff; border-color: var(--blue-600); }
+
+    /* ── Sent log ── */
+    .sent-entry { border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 11px 14px; margin-bottom: 8px; background: var(--bg); }
+    .sent-ts { font-size: 11px; color: var(--text3); }
+    .sent-expand { font-size: 11px; color: var(--blue-400); cursor: pointer; margin-left: auto; border: none; background: none; font-family: inherit; }
+    .sent-body { font-size: 12px; color: var(--text2); line-height: 1.6; margin-top: 8px; white-space: pre-wrap; word-break: break-word; display: none; padding-top: 8px; border-top: 0.5px solid var(--border); }
+    .sent-body.open { display: block; }
+
+    /* ── Library modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9990; display: flex; align-items: flex-end; justify-content: center; }
+    .modal-sheet { background: var(--bg); border-radius: 18px 18px 0 0; width: 100%; max-width: 640px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 -4px 32px rgba(0,0,0,0.3); }
+    .modal-header { padding: 16px 16px 12px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .modal-title { font-size: 16px; font-weight: 700; flex: 1; }
+    .modal-body { overflow-y: auto; padding: 12px 16px 24px; flex: 1; }
+    .lib-entry { border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 8px; background: var(--bg); }
+    .lib-entry-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .lib-entry-meta  { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+    .lib-entry-channels { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+
+    /* ── Settings ── */
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 0.5px solid var(--border); gap: 12px; }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label { font-size: 14px; font-weight: 500; }
+    .settings-sub   { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .settings-ctrl  { flex-shrink: 0; }
+    .num-input { width: 70px; text-align: center; padding: 7px 8px; font-size: 14px; font-weight: 600; }
+
+    /* ── Help accordion ── */
+    .help-section { border: 0.5px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 8px; background: var(--bg); overflow: hidden; }
+    .help-section-hdr { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; user-select: none; }
+    .help-section-hdr:hover { background: var(--bg2); }
+    .help-icon { font-size: 20px; flex-shrink: 0; }
+    .help-title { font-size: 14px; font-weight: 600; flex: 1; }
+    .help-chevron { font-size: 12px; color: var(--text3); transition: transform .2s; }
+    .help-section.open .help-chevron { transform: rotate(90deg); }
+    .help-body { display: none; padding: 12px 14px 14px; font-size: 13px; color: var(--text2); line-height: 1.7; border-top: 0.5px solid var(--border); }
+    .help-body h4 { font-size: 12px; font-weight: 700; color: var(--text); margin: 10px 0 4px; text-transform: uppercase; letter-spacing: .05em; }
+    .help-section.open .help-body { display: block; }
+
+    /* ── Misc ── */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -3px; }
+    .timeout-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; display: none; }
+    .timeout-inner { height: 100%; background: var(--blue-400); width: 100%; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty { text-align: center; padding: 2rem 1rem; color: var(--text3); font-size: 13px; }
+    .empty-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+    #update-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: var(--blue-800); color: #fff; padding: 12px 16px; font-size: 13px; align-items: center; gap: 10px; border-top: 1px solid var(--blue-600); }
+    #global-error-banner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 99999; background: #7f1d1d; color: #fee2e2; font-size: 13px; line-height: 1.5; padding: 10px 14px; align-items: flex-start; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+    #global-error-banner.show { display: flex; }
+    #debug-panel { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998; background: #1e1e2e; color: #cdd6f4; font-size: 11px; font-family: monospace; max-height: 40vh; overflow-y: auto; padding: 10px; border-top: 2px solid var(--amber); }
+    #debug-panel.show { display: block; }
+    #debug-log { white-space: pre-wrap; word-break: break-all; }
+    .debug-line { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .debug-line.ok   { color: #a6e3a1; }
+    .debug-line.err  { color: #f38ba8; }
+    .debug-line.warn { color: #f9e2af; }
+    .debug-line.info { color: #89dceb; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 3px; }
+
+    /* ── Demo Mode ── */
+    .demo-banner { display:none; background:#f59e0b; color:#1c1917; font-size:13px; font-weight:700;
+                   align-items:center; justify-content:center; gap:12px;
+                   padding:7px 14px; letter-spacing:.02em; position:sticky; top:0; z-index:100; }
+    .demo-banner.show { display:flex; }
+    .demo-exit-btn { background:rgba(0,0,0,0.18); border:none; color:#1c1917; font-size:12px;
+                     font-weight:700; padding:3px 10px; border-radius:999px; cursor:pointer;
+                     white-space:nowrap; flex-shrink:0; }
+    .toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; position:absolute; }
+    .toggle-slider { position:absolute; inset:0; background:var(--border2); border-radius:999px;
+                     cursor:pointer; transition:.2s; }
+    .toggle-slider:before { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px;
+                             background:#fff; border-radius:50%; transition:.2s; }
+    .toggle input:checked + .toggle-slider { background:#f59e0b; }
+    .toggle input:checked + .toggle-slider:before { transform:translateX(20px); }
+  </style>
+</head>
+<body>
+
+<div id="global-error-banner" role="alert">
+  <span style="flex-shrink:0">⚠️</span>
+  <div style="flex:1"><strong>Something went wrong — </strong><span id="global-error-msg">An unexpected error occurred.</span></div>
+  <button onclick="dismissGlobalError()" style="background:none;border:none;color:#fee2e2;font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0">✕</button>
+</div>
+
+<div id="update-banner">
+  <span>🔄 A new version is available.</span>
+  <button onclick="applyUpdate()" class="btn sm primary" style="margin-left:auto">Update now</button>
+  <button onclick="document.getElementById('update-banner').style.display='none'" class="btn sm">Later</button>
+</div>
+
+    <!-- Demo Mode banner -->
+    <div id="demo-banner" class="demo-banner">
+      <span>🎭 Demo Mode — no emails will be sent · real data preserved</span>
+      <button class="demo-exit-btn" onclick="setDemoMode(false)">✕ Exit Demo</button>
+    </div>
+
+<div id="debug-panel">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px">
+    <span style="color:var(--amber);font-weight:700">🐛 Debug Log</span>
+    <span style="flex:1;font-size:10px;color:#6c7086">Tap title 5× to toggle</span>
+    <button onclick="clearDebug()" style="background:none;border:1px solid rgba(255,255,255,0.2);color:#cdd6f4;font-size:10px;padding:2px 8px;border-radius:4px;cursor:pointer">Clear</button>
+    <button onclick="toggleDebug()" style="background:none;border:none;color:#f38ba8;font-size:14px;cursor:pointer">✕</button>
+  </div>
+  <div id="debug-log"></div>
+</div>
+
+<!-- Library modal -->
+<div id="lib-modal" class="modal-overlay" style="display:none" onclick="closeLibModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">📂 Announcement Library</span>
+      <span id="lib-count-badge" style="font-size:12px;color:var(--text3)"></span>
+      <button class="btn xs" onclick="closeLibModal()">✕ Close</button>
+    </div>
+    <div class="modal-body" id="lib-modal-body"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="app-header">
+    <div class="header-icon"><img src="icon-192.png" alt="UUFNN Media Hub"></div>
+    <div>
+      <div class="header-title" id="header-title-tap" style="cursor:default">UUFNN Media Hub</div>
+      <div class="header-sub">Write once — distribute everywhere</div>
+    </div>
+    <div class="header-right">
+      <div class="header-save">
+        <div class="save-dot" id="save-dot"></div>
+        <span id="save-label">Saved</span>
+      </div>
+      <span class="header-ver">v<span id="header-version"></span></span>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('compose',this)"><span class="tab-icon">✏️</span>Compose</button>
+    <button class="tab-btn" onclick="switchTab('contacts',this)"><span class="tab-icon">👥</span>Contacts</button>
+    <button class="tab-btn" onclick="switchTab('distribute',this)"><span class="tab-icon">📤</span>Distribute</button>
+    <button class="tab-btn" onclick="switchTab('sentlog',this)"><span class="tab-icon">📋</span>Sent Log</button>
+    <button class="tab-btn" onclick="switchTab('settings',this)"><span class="tab-icon">⚙️</span>Settings</button>
+    <button class="tab-btn" onclick="switchTab('help',this)"><span class="tab-icon">❓</span>Help</button>
+  </div>
+
+  <div class="tab-content">
+
+    <!-- ═══════════════════ COMPOSE TAB ═══════════════════ -->
+    <div id="pane-compose" class="tab-pane active">
+
+      <!-- Toolbar: New / Save / Library -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="btn sm" onclick="newAnnouncement()">📄 New</button>
+        <button class="btn sm success" onclick="saveToLibrary()">💾 Save to library</button>
+        <button class="btn sm" onclick="openLibModal()">📂 Library <span id="lib-badge" style="font-size:10px;color:var(--text3)"></span></button>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label>Announcement headline <span class="req">*</span></label>
+          <input id="ann-title" placeholder="e.g. Annual Summer Picnic — July 20th" oninput="clearFErr('ann-title','err-ann-title');markDirty()">
+          <div class="field-err" id="err-ann-title">A headline is required.</div>
+        </div>
+        <div class="form-group">
+          <label>Full announcement <span class="req">*</span> <span style="font-weight:400;color:var(--text3)">— write naturally with all the details</span></label>
+          <textarea id="ann-body" style="min-height:140px" oninput="clearFErr('ann-body','err-ann-body');markDirty()"></textarea>
+          <div class="field-err" id="err-ann-body">Announcement text is required.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0">
+            <label>Organization name</label>
+            <input id="ann-church" placeholder="e.g. UUFNN" oninput="markDirty()">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Contact person &amp; details</label>
+            <input id="ann-contact" placeholder="Office — (775) 555-0100" oninput="markDirty()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Channel filter -->
+      <div class="card">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">Generate for specific channels <span style="font-weight:400;color:var(--text3)">(leave all on for everything)</span></div>
+        <div id="gen-channel-picks" class="platform-picker" style="margin-bottom:8px">
+          <span class="tag facebook"     data-p="facebook"     onclick="toggleGenPick(this)">Facebook</span>
+          <span class="tag instagram"    data-p="instagram"    onclick="toggleGenPick(this)">Instagram</span>
+          <span class="tag x"            data-p="x"            onclick="toggleGenPick(this)">X / Twitter</span>
+          <span class="tag bluesky"      data-p="bluesky"      onclick="toggleGenPick(this)">Bluesky</span>
+          <span class="tag email"        data-p="email"        onclick="toggleGenPick(this)">Email newsletter</span>
+          <span class="tag bulletin"     data-p="bulletin"     onclick="toggleGenPick(this)">Bulletin</span>
+          <span class="tag newspaper"    data-p="newspaper"    onclick="toggleGenPick(this)">Newspaper</span>
+          <span class="tag radio"        data-p="radio"        onclick="toggleGenPick(this)">Radio</span>
+          <span class="tag tv"           data-p="tv"           onclick="toggleGenPick(this)">TV station</span>
+          <span class="tag pressrelease" data-p="pressrelease" onclick="toggleGenPick(this)">Press release</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn xs" onclick="setAllGenPicks(true)">All on</button>
+          <button class="btn xs" onclick="setAllGenPicks(false)">All off</button>
+        </div>
+      </div>
+
+      <div id="gen-error" class="notice error hidden"></div>
+
+      <div class="flex-end">
+        <button class="btn primary" id="gen-btn" onclick="generateContent()">✨ Generate selected versions</button>
+      </div>
+      <div class="timeout-bar" id="timeout-bar"><div class="timeout-inner" id="timeout-inner"></div></div>
+
+      <div id="gen-output" style="display:none;margin-top:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+          <h2 style="font-size:16px;font-weight:700;flex:1">Generated versions</h2>
+          <button class="btn sm" onclick="switchTab('distribute',document.querySelectorAll('.tab-btn')[2])">Distribute →</button>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:6px">Each version is tailored for its channel. <strong>Tap ✏️ Edit to tweak</strong> any version before distributing.</p>
+        <div id="char-warnings"></div>
+        <div class="section-label">📱 Social media</div>
+        <div id="out-social"></div>
+        <div class="section-label">📡 Traditional media</div>
+        <div id="out-trad"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ CONTACTS TAB ═══════════════════ -->
+    <div id="pane-contacts" class="tab-pane">
+      <div class="notice info">
+        ✨ Demo contacts are pre-loaded. Replace with your real roster when ready.
+        <button class="btn sm" onclick="loadDemo()" style="margin-top:8px;display:block">↺ Reload demo contacts</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <h2 style="font-size:16px;font-weight:700;flex:1">Contact roster</h2>
+        <button class="btn primary sm" onclick="showAddForm()">+ Add contact</button>
+      </div>
+
+      <div id="add-form" class="card" style="display:none">
+        <h3 style="font-size:14px;font-weight:700;margin-bottom:12px">New contact</h3>
+        <div class="form-group">
+          <label>Contact type</label>
+          <div class="type-toggle">
+            <button class="type-btn active" id="type-social" onclick="setType('social',this)">📱 Social volunteer</button>
+            <button class="type-btn" id="type-media" onclick="setType('media',this)">📡 Media outlet</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0">
+            <label>First name <span class="req">*</span></label>
+            <input id="f-first" placeholder="Jane" oninput="clearFErr('f-first','err-first')">
+            <div class="field-err" id="err-first">First name is required.</div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Last name</label>
+            <input id="f-last" placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group" id="f-org-row" style="display:none">
+          <label>Organization / outlet <span class="req">*</span></label>
+          <input id="f-org" placeholder="e.g. Reno Gazette-Journal" oninput="clearFErr('f-org','err-org')">
+          <div class="field-err" id="err-org">Organization name is required for media contacts.</div>
+        </div>
+        <div class="form-group">
+          <label>Email address <span class="req">*</span></label>
+          <input id="f-email" type="email" placeholder="jane@example.com" oninput="clearFErr('f-email','err-email')">
+          <div class="field-err" id="err-email">A valid email address is required.</div>
+        </div>
+        <div class="form-group" id="f-phone-row" style="display:none">
+          <label>Phone (optional)</label>
+          <input id="f-phone" placeholder="(775) 555-0100">
+        </div>
+        <div class="form-group">
+          <label>Channels / platforms <span class="req">*</span></label>
+          <div class="platform-picker" id="f-platforms">
+            <div id="social-picks" style="display:flex;flex-wrap:wrap;gap:6px">
+              <span class="tag facebook unselected"     data-p="facebook"     onclick="togglePick(this)">Facebook</span>
+              <span class="tag instagram unselected"    data-p="instagram"    onclick="togglePick(this)">Instagram</span>
+              <span class="tag x unselected"            data-p="x"            onclick="togglePick(this)">X / Twitter</span>
+              <span class="tag bluesky unselected"      data-p="bluesky"      onclick="togglePick(this)">Bluesky</span>
+              <span class="tag email unselected"        data-p="email"        onclick="togglePick(this)">Email newsletter</span>
+              <span class="tag bulletin unselected"     data-p="bulletin"     onclick="togglePick(this)">Bulletin</span>
+            </div>
+            <div id="media-picks" style="display:none;flex-wrap:wrap;gap:6px">
+              <span class="tag newspaper unselected"    data-p="newspaper"    onclick="togglePick(this)">Newspaper</span>
+              <span class="tag radio unselected"        data-p="radio"        onclick="togglePick(this)">Radio</span>
+              <span class="tag tv unselected"           data-p="tv"           onclick="togglePick(this)">TV station</span>
+              <span class="tag pressrelease unselected" data-p="pressrelease" onclick="togglePick(this)">Press release</span>
+            </div>
+          </div>
+          <div class="field-err" id="err-platforms">Please select at least one channel.</div>
+        </div>
+        <div class="flex-end">
+          <button class="btn" onclick="hideAddForm()">Cancel</button>
+          <button class="btn primary" onclick="saveContact()">Save contact</button>
+        </div>
+      </div>
+
+      <div class="section-label">📱 Social media volunteers</div>
+      <div id="social-list"></div>
+      <div class="section-label">📡 Traditional media contacts</div>
+      <div id="media-list"></div>
+    </div>
+
+    <!-- ═══════════════════ DISTRIBUTE TAB ═══════════════════ -->
+    <div id="pane-distribute" class="tab-pane">
+      <div id="dist-no-content" class="notice warn hidden">⚠️ No generated content yet. Go to <strong>Compose</strong> and click Generate first.</div>
+      <div id="dist-no-contacts" class="notice warn hidden">⚠️ No contacts in roster. Add contacts in the <strong>Contacts</strong> tab first.</div>
+      <div id="dist-main" style="display:none">
+        <h2 style="font-size:16px;font-weight:700;margin-bottom:4px">Distribution plan</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Select who to email. Filter by outlet type, or check individually.</p>
+        <div class="filter-bar" id="dist-filter-bar">
+          <span class="filter-chip active" data-filter="all"    onclick="setDistFilter('all',this)">All</span>
+          <span class="filter-chip"        data-filter="social" onclick="setDistFilter('social',this)">📱 Social</span>
+          <span class="filter-chip"        data-filter="media"  onclick="setDistFilter('media',this)">📡 Media</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <button class="btn xs" onclick="selectAllDist(true)">☑ Select all</button>
+          <button class="btn xs" onclick="selectAllDist(false)">☐ Select none</button>
+          <span id="dist-sel-count" style="font-size:12px;color:var(--text2);margin-left:4px"></span>
+        </div>
+        <div id="dist-contact-list"></div>
+        <div id="dist-coverage-warn"></div>
+        <div id="dist-charlimit-warn"></div>
+        <div class="flex-end">
+          <button class="btn primary" onclick="sendSelected()">📧 Email selected contacts</button>
+        </div>
+        <div class="notice" style="margin-top:12px">🔒 Clicking "Email selected contacts" opens your default email client with a pre-addressed draft for each selected contact. Nothing sends automatically — you review and send each one.</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ SENT LOG TAB ═══════════════════ -->
+    <div id="pane-sentlog" class="tab-pane">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <h2 style="font-size:16px;font-weight:700;flex:1">Sent Log</h2>
+        <button class="btn danger sm" id="clear-log-btn" onclick="clearSentLog()" style="display:none">🗑 Clear log</button>
+      </div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Each time you distribute an announcement, a record is saved here.</p>
+      <div id="sent-log-list"></div>
+    </div>
+
+    <!-- ═══════════════════ SETTINGS TAB ═══════════════════ -->
+    <div id="pane-settings" class="tab-pane">
+      <h2 style="font-size:16px;font-weight:700;margin-bottom:4px">Settings</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">App preferences are saved automatically.</p>
+
+      <div class="card">
+        <div class="section-label" style="margin-top:0">📂 Announcement Library</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Library size limit</div>
+            <div class="settings-sub">Maximum announcements saved. Oldest is dropped when limit is reached.</div>
+          </div>
+          <div class="settings-ctrl">
+            <input type="number" id="setting-lib-max" class="num-input" min="5" max="100" value="20"
+              onchange="saveSettings()" oninput="saveSettings()">
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Current library size</div>
+            <div class="settings-sub" id="setting-lib-current">0 announcements saved</div>
+          </div>
+          <div class="settings-ctrl">
+            <button class="btn danger xs" onclick="clearLibrary()">Clear library</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-label" style="margin-top:0">💾 Backup &amp; Restore</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Export backup</div>
+            <div class="settings-sub">Downloads a JSON file with all contacts, library, sent log, and settings.</div>
+          </div>
+          <div class="settings-ctrl">
+            <button class="btn sm primary" onclick="exportBackup()">📥 Export</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Restore from backup</div>
+            <div class="settings-sub">Replaces all current data with the contents of a backup file.</div>
+          </div>
+          <div class="settings-ctrl">
+            <button class="btn sm" onclick="document.getElementById('restore-file-input').click()">📤 Restore</button>
+            <input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="importBackup(this)">
+          </div>
+        </div>
+        <div id="restore-status" class="notice hidden" style="margin-top:8px;margin-bottom:0"></div>
+      </div>
+
+
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Debug log</div>
+            <div class="settings-sub">Tap the app title 5 times to toggle the debug log panel.</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Reset all data</div>
+            <div class="settings-sub">Clears contacts, library, sent log, and draft. Cannot be undone.</div>
+          </div>
+          <div class="settings-ctrl">
+            <button class="btn danger xs" onclick="resetAllData()">Reset</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="section-label" style="margin-top:0">🎭 Demo Mode</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Demo Mode</div>
+            <div class="settings-sub">Loads sample contacts and announcement. Suppresses email sends. Real data is preserved and restored when toggled off.</div>
+          </div>
+          <div class="settings-ctrl">
+            <label class="toggle" title="Toggle Demo Mode">
+              <input type="checkbox" id="setting-demo" onchange="setDemoMode(this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="text-align:center;padding:16px">
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">UUFNN Media Hub</div>
+        <div style="font-size:12px;color:var(--text3)">Version <span id="settings-version"></span> · A Better Me Apps</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Data stored locally on this device</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;opacity:.7">© 2026 Alan H. Jordan. All Rights Reserved.</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ HELP TAB ═══════════════════ -->
+    <div id="pane-help" class="tab-pane">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <h2 style="font-size:16px;font-weight:700">Help &amp; Guide</h2>
+        <span style="font-size:11px;color:var(--text3)">v<span id="help-version"></span></span>
+      </div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">Tap any section to expand it.</p>
+
+      <div class="help-section" onclick="toggleHelp('h-overview')">
+        <div class="help-section-hdr"><span class="help-icon">📡</span><span class="help-title">What is UUFNN Media Hub?</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-overview">
+          Write one announcement — get tailored versions for every channel, social and traditional — then email each version to the right volunteer or contact.
+          <h4>Channels</h4>
+          <strong>Social:</strong> Facebook, Instagram, X, Bluesky, Email newsletter, Bulletin<br>
+          <strong>Traditional:</strong> Newspaper (AP release), Radio (60-sec advisory), TV advisory, Formal press release
+          <h4>Contacts</h4>
+          <strong>Social volunteers</strong> — congregation members who manage platforms<br>
+          <strong>Media contacts</strong> — journalists and stations (require org name)
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-compose')">
+        <div class="help-section-hdr"><span class="help-icon">✏️</span><span class="help-title">Compose — writing, generating &amp; the library</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-compose">
+          <h4>New announcement</h4>
+          Tap <strong>📄 New</strong> to clear the form and start fresh. If you have unsaved work you'll be asked to confirm.
+          <h4>Save to library</h4>
+          Tap <strong>💾 Save to library</strong> to store the current announcement (text + all generated versions) in the library. The library holds up to the number set in Settings (default 20). When full, the oldest entry is dropped after confirmation.
+          <h4>Library</h4>
+          Tap <strong>📂 Library</strong> to browse saved announcements. Load any entry back into Compose with one tap, or delete entries you no longer need.
+          <h4>Generating</h4>
+          Use the channel filter to choose which channels to generate — or leave all on for all 10. Click <strong>Generate</strong>. Takes 10–20 seconds.
+          <h4>Editing</h4>
+          Tap <strong>✏️ Edit</strong> on any generated block to edit it in place. Tap <strong>✅ Done</strong> to save. Edited versions are what gets sent.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-contacts')">
+        <div class="help-section-hdr"><span class="help-icon">👥</span><span class="help-title">Contacts — managing your roster</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-contacts">
+          <h4>Adding a contact</h4>
+          Tap <strong>+ Add contact</strong>. Choose Social volunteer or Media outlet, fill in the details, and assign channels.
+          <h4>Demo contacts</h4>
+          Demo contacts (blue "demo" badge) are pre-loaded. Use <strong>Reload demo contacts</strong> to restore them.
+          <h4>Deleting</h4>
+          Tap 🗑 and confirm. Cannot be undone.
+          <h4>Editing</h4>
+          Delete and re-add to update a contact's information.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-distribute')">
+        <div class="help-section-hdr"><span class="help-icon">📤</span><span class="help-title">Distribute — selecting &amp; sending</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-distribute">
+          <h4>Filter &amp; select</h4>
+          Use <strong>All / Social / Media</strong> filter chips to narrow the list, then check individual contacts. <strong>Select all / Select none</strong> work within the current filter.
+          <h4>Sending</h4>
+          Tap <strong>Email selected contacts</strong>. Your email client opens a pre-addressed draft for each selected contact — staggered 400ms apart. Nothing sends automatically.
+          <h4>What's in the email</h4>
+          Each contact receives only their assigned channel versions. Edits made in Compose are included.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-sentlog')">
+        <div class="help-section-hdr"><span class="help-icon">📋</span><span class="help-title">Sent Log</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-sentlog">
+          Each time you distribute an announcement, a record is saved here — showing the headline, date, recipients, channels, and the full text sent to each person.
+          <h4>Expanding an entry</h4>
+          Tap <strong>Show content</strong> to see the full text sent to that contact.
+          <h4>Note on delivery</h4>
+          The log records that an email draft was <em>opened</em> in your email client, not that it was sent or delivered. Confirm in your email client's Sent folder.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-channels')">
+        <div class="help-section-hdr"><span class="help-icon">📝</span><span class="help-title">What each channel version looks like</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-channels">
+          <h4>Facebook</h4>2–3 warm paragraphs, full details, call to action. ~200–280 words.
+          <h4>Instagram</h4>3–4 punchy sentences + 8–10 hashtags.
+          <h4>X / Twitter</h4>Hard limit 270 characters including hashtags.
+          <h4>Bluesky</h4>Hard limit 290 characters, warm tone.
+          <h4>Email newsletter</h4>Subject line, greeting, 3–4 paragraphs, contact info, sign-off.
+          <h4>Bulletin insert</h4>4 lines max, print-friendly, no URLs.
+          <h4>Newspaper</h4>AP-style release, headline in caps, dateline, "###", media contact block.
+          <h4>Radio</h4>~150-word 60-second read-aloud, written for the ear.
+          <h4>TV</h4>WHAT/WHEN/WHERE/WHO/VISUAL OPPORTUNITIES, story angle, contact block.
+          <h4>Press release</h4>Formal release with quote, boilerplate, full contact block.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-settings')">
+        <div class="help-section-hdr"><span class="help-icon">⚙️</span><span class="help-title">Settings</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-settings">
+          <h4>Backup &amp; Restore</h4>
+          <strong>Export backup</strong> downloads a JSON file with all your contacts, library entries, sent log, and settings. Save it to your files app or email it to yourself as a safe copy.<br><br>
+          <strong>Restore from backup</strong> reads a previously exported JSON file and replaces all current data. A summary shows what will be loaded before you confirm.
+          <h4>Library size limit</h4>
+          Default is 20. You can set any number from 5 to 100 in the Settings tab. When you save a new announcement and the library is full, the oldest entry is dropped (after confirmation).
+          <h4>Clear library</h4>
+          Removes all saved announcements. Your current draft and contacts are not affected.
+          <h4>Reset all data</h4>
+          Clears everything — contacts, library, sent log, and draft. Use with caution.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-tips')">
+        <div class="help-section-hdr"><span class="help-icon">💡</span><span class="help-title">Tips &amp; best practices</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-tips">
+          • <strong>Give the AI everything</strong> — dates, times, location, what to bring, rain plan. More detail = better versions.<br><br>
+          • <strong>Edit before you send</strong> — always review X/Bluesky character counts and double-check dates and names.<br><br>
+          • <strong>Use channel filters</strong> — regenerate just social channels without losing your traditional media versions.<br><br>
+          • <strong>Save recurring events to the library</strong> — load last year's picnic announcement, update the date, and regenerate.<br><br>
+          • <strong>Stagger large sends</strong> — some mobile browsers block multiple tabs at once. If drafts don't all open, tap Send again for missed ones.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-privacy')">
+        <div class="help-section-hdr"><span class="help-icon">🔒</span><span class="help-title">Privacy &amp; data</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-privacy">
+          • All data (contacts, library, sent log, draft) is stored <strong>only on this device</strong> via IndexedDB.<br><br>
+          • When you Generate, your announcement text is sent to an AI service via a Cloudflare Worker proxy. The API key is held by the Worker — never exposed in the app.<br><br>
+          • Emails are opened in your default email client. The app does not access or send email on your behalf.
+        </div>
+      </div>
+
+      <div class="help-section" onclick="toggleHelp('h-debug')">
+        <div class="help-section-hdr"><span class="help-icon">🐛</span><span class="help-title">Troubleshooting</span><span class="help-chevron">▶</span></div>
+        <div class="help-body" id="h-debug">
+          <h4>Generation fails or times out</h4>
+          • Check your internet connection.<br>
+          • Confirm the Cloudflare Worker is deployed and WORKER_URL matches.<br>
+          • Verify ANTHROPIC_API_KEY is set in the Worker's environment.
+          <h4>Debug log</h4>
+          Tap <strong>UUFNN Media Hub</strong> in the header five times to open the debug log.
+          <h4>Emails don't open</h4>
+          Ensure a default email app is configured on your device.
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:10px;text-align:center;padding:16px">
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">UUFNN Media Hub</div>
+        <div style="font-size:12px;color:var(--text3)">Version <span id="help-version-2"></span> · A Better Me Apps</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Data stored locally on this device</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;opacity:.7">© 2026 Alan H. Jordan. All Rights Reserved.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+'use strict';
+/*
+ * UUFNN Media Hub
+ * Copyright © 2026 Alan H. Jordan. All Rights Reserved.
+ * Unauthorized reproduction or distribution is prohibited.
+ */
+
+var APP_VERSION = '0.3.3';
+var DB_NAME     = 'uufnn-media-hub';
+var STORE_NAME  = 'kv';
+var TIMEOUT_MS  = 45000;
+var EMAIL_RE    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var WORKER_URL  = 'https://uufnn-media-proxy.abmeapps.workers.dev/generate';
+
+var PLATFORMS = {
+  facebook:    { label: 'Facebook',         group: 'social' },
+  instagram:   { label: 'Instagram',        group: 'social' },
+  x:           { label: 'X / Twitter',      group: 'social', limit: 280 },
+  bluesky:     { label: 'Bluesky',          group: 'social', limit: 300 },
+  email:       { label: 'Email newsletter', group: 'social' },
+  bulletin:    { label: 'Bulletin insert',  group: 'social' },
+  newspaper:   { label: 'Newspaper',        group: 'media'  },
+  radio:       { label: 'Radio',            group: 'media'  },
+  tv:          { label: 'TV station',       group: 'media'  },
+  pressrelease:{ label: 'Press release',    group: 'media'  },
+};
+var SOCIAL_KEYS = ['facebook','instagram','x','bluesky','email','bulletin'];
+var MEDIA_KEYS  = ['newspaper','radio','tv','pressrelease'];
+var ALL_KEYS    = SOCIAL_KEYS.concat(MEDIA_KEYS);
+
+var DEMO_CONTACTS = [
+  { type:'social', first:'Margaret', last:'Okafor',  org:'',                     email:'margaret@example.com', phone:'',               platforms:['facebook','email'],    demo:true },
+  { type:'social', first:'Tom',      last:'Briggs',  org:'',                     email:'tom@example.com',      phone:'',               platforms:['instagram','bluesky'], demo:true },
+  { type:'social', first:'Susan',    last:'Hartwell',org:'',                     email:'susan@example.com',    phone:'',               platforms:['x'],                   demo:true },
+  { type:'social', first:'Pastor',   last:'Mike',    org:'',                     email:'pastor@example.com',   phone:'',               platforms:['bulletin'],             demo:true },
+  { type:'media',  first:'Alex',     last:'Navarro', org:'Reno Gazette-Journal', email:'anavarro@example.com', phone:'(775) 555-0110', platforms:['newspaper'],           demo:true },
+  { type:'media',  first:'Dana',     last:'Wells',   org:'KUNR Public Radio',    email:'dwells@example.com',   phone:'(775) 555-0141', platforms:['radio'],               demo:true },
+  { type:'media',  first:'Chris',    last:'Park',    org:'KRNV News 4',          email:'cpark@example.com',    phone:'(775) 555-0177', platforms:['tv'],                  demo:true },
+];
+
+var DEMO_ANN = {
+  title:   'Fake Summer Picnic — Sunday, July 20th',
+  body:    'Everyone at UUFNN is warmly invited to our Fake Summer Picnic on Sunday, July 20th, beginning at noon at Riverside Park (1200 River Road, Reno).\n\nThis is a sample announcement used to demonstrate the UUFNN Media Hub. Nothing here is real — the date, the event, and the details are all fictional.\n\nWe\'ll have imaginary food, lawn games, a bounce house for the kids, and live music. Please bring a fictional dish to share — salads, sides, and desserts are especially welcome. Lemonade and water provided.\n\nThis is a wonderful opportunity to see how the app formats announcements for every channel. Exit Demo Mode in Settings when you are ready to use the app for real.',
+  church:  'UUFNN',
+  contact: 'Office — (775) 555-0100 or office@uufnn.org'
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+var contacts         = [];
+var generatedContent = {};
+var currentType      = 'social';
+var genTimeoutId     = null;
+var distFilter       = 'all';
+var sentLog          = [];
+var distSelected     = {};
+var library          = [];   // [{id, ts, title, body, church, contact, generated}]
+var settings         = { libMax: 20 };
+var draftDirty       = false;
+var demoMode         = false;
+var _realContacts    = null;   // snapshot while demo is active
+var _realDraft       = null;   // snapshot while demo is active
+
+// ═══════════════════════════════════════
+// KEYS
+// ═══════════════════════════════════════
+var KEYS = {
+  CONTACTS:  'uufnn-contacts-v1',
+  DRAFT:     'uufnn-draft-v1',
+  GENERATED: 'uufnn-generated-v1',
+  SENTLOG:   'uufnn-sentlog-v1',
+  LIBRARY:   'uufnn-library-v1',
+  SETTINGS:  'uufnn-settings-v1',
+};
+
+// ═══════════════════════════════════════
+// DEBUG
+// ═══════════════════════════════════════
+var debugTapCount = 0, debugTapTimer = null;
+document.getElementById('header-title-tap').addEventListener('click', function() {
+  debugTapCount++;
+  clearTimeout(debugTapTimer);
+  debugTapTimer = setTimeout(function() { debugTapCount = 0; }, 2000);
+  if (debugTapCount >= 5) { debugTapCount = 0; toggleDebug(); }
+});
+function toggleDebug() { document.getElementById('debug-panel').classList.toggle('show'); }
+function clearDebug()  { document.getElementById('debug-log').innerHTML = ''; }
+function dbg(msg, level) {
+  level = level || 'info';
+  var line = document.createElement('div');
+  line.className = 'debug-line ' + level;
+  line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+  var log = document.getElementById('debug-log');
+  log.appendChild(line); log.scrollTop = log.scrollHeight;
+  console.log('[UUFNN ' + level.toUpperCase() + ']', msg);
+}
+
+// ═══════════════════════════════════════
+// GLOBAL ERROR HANDLING
+// ═══════════════════════════════════════
+(function() {
+  var shown = false;
+  function showBanner(msg) {
+    if (shown) return; shown = true;
+    document.getElementById('global-error-msg').textContent = msg || 'An unexpected error occurred.';
+    document.getElementById('global-error-banner').classList.add('show');
+  }
+  window.dismissGlobalError = function() {
+    document.getElementById('global-error-banner').classList.remove('show'); shown = false;
+  };
+  window.onerror = function(message, source, lineno, colno, error) {
+    var label = error ? (error.name + ': ' + (error.message || message)) : String(message);
+    dbg('onerror: ' + label, 'err'); showBanner(label); return false;
+  };
+  window.addEventListener('unhandledrejection', function(e) {
+    var r = e.reason;
+    var label = r instanceof Error ? (r.name + ': ' + r.message) : String(r || 'Unhandled rejection');
+    dbg('unhandledrejection: ' + label, 'err'); showBanner(label);
+  });
+})();
+
+// ═══════════════════════════════════════
+// INDEXEDDB
+// ═══════════════════════════════════════
+(function() {
+  var db = null;
+  function openDB() {
+    return new Promise(function(resolve, reject) {
+      if (db) { resolve(db); return; }
+      var req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = function() { req.result.createObjectStore(STORE_NAME); };
+      req.onsuccess = function() { db = req.result; resolve(db); };
+      req.onerror   = function() { reject(req.error); };
+    });
+  }
+  window.storage = {
+    get: function(key) {
+      return openDB().then(function(d) {
+        return new Promise(function(resolve, reject) {
+          var r = d.transaction(STORE_NAME,'readonly').objectStore(STORE_NAME).get(key);
+          r.onsuccess = function() { r.result !== undefined ? resolve({key:key,value:r.result}) : reject(new Error('not found')); };
+          r.onerror   = function() { reject(r.error); };
+        });
+      });
+    },
+    set: function(key, value) {
+      return openDB().then(function(d) {
+        return new Promise(function(resolve, reject) {
+          var tx = d.transaction(STORE_NAME,'readwrite');
+          tx.objectStore(STORE_NAME).put(value, key);
+          tx.oncomplete = function() { resolve({key:key,value:value}); };
+          tx.onerror    = function() { reject(tx.error); };
+        });
+      });
+    },
+    delete: function(key) {
+      return openDB().then(function(d) {
+        return new Promise(function(resolve, reject) {
+          var tx = d.transaction(STORE_NAME,'readwrite');
+          tx.objectStore(STORE_NAME).delete(key);
+          tx.oncomplete = function() { resolve({key:key,deleted:true}); };
+          tx.onerror    = function() { reject(tx.error); };
+        });
+      });
+    }
+  };
+})();
+
+// ═══════════════════════════════════════
+// SAVE INDICATOR / DIRTY TRACKING
+// ═══════════════════════════════════════
+function setSaveIndicator(ok, msg) {
+  document.getElementById('save-dot').className = 'save-dot' + (ok ? '' : ' unsaved');
+  document.getElementById('save-label').textContent = msg || (ok ? 'Saved' : 'Unsaved');
+}
+function markDirty() { draftDirty = true; }
+
+function saveContacts() {
+  setSaveIndicator(false, 'Saving…');
+  storage.set(KEYS.CONTACTS, contacts).then(function() { setSaveIndicator(true); })
+    .catch(function(e) { setSaveIndicator(false,'Save failed'); dbg('saveContacts: '+e.message,'err'); });
+}
+function saveDraft() {
+  var d = { title: document.getElementById('ann-title').value, body: document.getElementById('ann-body').value,
+            church: document.getElementById('ann-church').value, contact: document.getElementById('ann-contact').value };
+  storage.set(KEYS.DRAFT, d).catch(function(e) { dbg('saveDraft: '+e.message,'warn'); });
+  draftDirty = false;
+}
+function saveSentLog()  { storage.set(KEYS.SENTLOG,  sentLog).catch(function(e)  { dbg('saveSentLog: '+e.message,'warn'); }); }
+function saveLibrary()  { storage.set(KEYS.LIBRARY,  library).catch(function(e)  { dbg('saveLibrary: '+e.message,'warn'); }); updateLibBadge(); }
+function saveSettings() {
+  var el = document.getElementById('setting-lib-max');
+  var v  = parseInt(el.value, 10);
+  if (isNaN(v) || v < 5)  { v = 5;   el.value = 5;   }
+  if (v > 100)             { v = 100; el.value = 100; }
+  settings.libMax = v;
+  storage.set(KEYS.SETTINGS, settings).catch(function(e) { dbg('saveSettings: '+e.message,'warn'); });
+}
+
+// ═══════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════
+function initials(f, l) { return ((f||'')[0]||'').toUpperCase() + ((l||'')[0]||'').toUpperCase(); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function isDuplicate(email) { return contacts.some(function(c) { return c.email.toLowerCase() === email.toLowerCase(); }); }
+function clearFErr(inputId, errId) {
+  var el = document.getElementById(inputId); if (el) el.classList.remove('err');
+  var er = document.getElementById(errId);   if (er) er.classList.remove('show');
+}
+function markFErr(inputId, errId, msg) {
+  var el = document.getElementById(inputId); if (el) el.classList.add('err');
+  var er = document.getElementById(errId);   if (er) { if (msg) er.textContent = msg; er.classList.add('show'); }
+}
+function showNotice(id, msg) { var el = document.getElementById(id); if (!el) return; if (msg) el.innerHTML = msg; el.classList.remove('hidden'); }
+function hideNotice(id)      { var el = document.getElementById(id); if (el) el.classList.add('hidden'); }
+
+function updateLibBadge() {
+  var n = library.length;
+  document.getElementById('lib-badge').textContent = n ? '(' + n + ')' : '';
+  var el = document.getElementById('setting-lib-current');
+  if (el) el.textContent = n + ' announcement' + (n !== 1 ? 's' : '') + ' saved';
+}
+
+// ═══════════════════════════════════════
+// CONTACTS
+// ═══════════════════════════════════════
+function loadDemo() {
+  contacts = DEMO_CONTACTS.concat(contacts.filter(function(c) { return !c.demo; }));
+  saveContacts(); renderContacts();
+}
+
+function fillDemoAnn() {
+  document.getElementById('ann-title').value   = DEMO_ANN.title;
+  document.getElementById('ann-body').value    = DEMO_ANN.body;
+  document.getElementById('ann-church').value  = DEMO_ANN.church;
+  document.getElementById('ann-contact').value = DEMO_ANN.contact;
+  ['ann-title','ann-body'].forEach(function(id) { clearFErr(id,'err-'+id); });
+  hideNotice('gen-error');
+  document.getElementById('gen-output').style.display = 'none';
+  generatedContent = {};
+  draftDirty = false;
+}
+
+function renderContacts() {
+  renderList('social-list', contacts.filter(function(c) { return c.type==='social'; }));
+  renderList('media-list',  contacts.filter(function(c) { return c.type==='media';  }));
+}
+
+function renderList(id, list) {
+  var el = document.getElementById(id);
+  if (!list.length) { el.innerHTML = '<div class="empty"><span class="empty-icon">👤</span>None yet.</div>'; return; }
+  el.innerHTML = list.map(function(c) {
+    var idx = contacts.indexOf(c);
+    return '<div class="card"><div class="contact-row">' +
+      '<div class="avatar ' + c.type + '">' + initials(c.first,c.last) + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="contact-name">' + escHtml(c.first+' '+c.last) + (c.demo ? '<span class="demo-badge">demo</span>' : '') + '</div>' +
+        (c.org ? '<div class="contact-org">' + escHtml(c.org) + '</div>' : '') +
+        '<div class="contact-email">' + escHtml(c.email) + (c.phone ? ' · '+escHtml(c.phone) : '') + '</div>' +
+        '<div class="platform-tags">' + c.platforms.map(function(p) {
+          return '<span class="tag '+p+'" style="cursor:default">' + (PLATFORMS[p]?PLATFORMS[p].label:p) + '</span>';
+        }).join('') + '</div>' +
+      '</div>' +
+      '<button class="btn danger sm" onclick="confirmDelete('+idx+')" title="Remove">🗑</button>' +
+    '</div></div>';
+  }).join('');
+}
+
+function confirmDelete(i) {
+  var c = contacts[i]; if (!c) return;
+  if (confirm('Remove ' + c.first + ' ' + c.last + (c.org?' ('+c.org+')':'') + ' from the roster?\n\nThis cannot be undone.')) {
+    contacts.splice(i,1); saveContacts(); renderContacts();
+  }
+}
+
+function showAddForm() { document.getElementById('add-form').style.display = 'block'; }
+function hideAddForm() {
+  document.getElementById('add-form').style.display = 'none';
+  ['f-first','f-last','f-email','f-org','f-phone'].forEach(function(id) { var el=document.getElementById(id); if(el) el.value=''; });
+  ['f-first','f-email','f-org'].forEach(function(id) { clearFErr(id,'err-'+id.slice(2)); });
+  document.getElementById('err-platforms').classList.remove('show');
+  document.getElementById('f-platforms').classList.remove('err');
+  document.querySelectorAll('#f-platforms .tag').forEach(function(t) { t.classList.add('unselected'); });
+  setType('social', document.getElementById('type-social'));
+}
+
+function setType(t, btn) {
+  currentType = t;
+  document.querySelectorAll('.type-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active');
+  document.getElementById('f-org-row').style.display    = t==='media' ? 'block' : 'none';
+  document.getElementById('f-phone-row').style.display  = t==='media' ? 'block' : 'none';
+  document.getElementById('social-picks').style.display = t==='social'? 'flex'  : 'none';
+  document.getElementById('media-picks').style.display  = t==='media' ? 'flex'  : 'none';
+  document.querySelectorAll('#f-platforms .tag').forEach(function(tg) { tg.classList.add('unselected'); });
+  clearFErr('f-org','err-org');
+  document.getElementById('err-platforms').classList.remove('show');
+  document.getElementById('f-platforms').classList.remove('err');
+}
+
+function togglePick(el) {
+  el.classList.toggle('unselected');
+  document.getElementById('f-platforms').classList.remove('err');
+  document.getElementById('err-platforms').classList.remove('show');
+}
+
+function saveContact() {
+  var first = document.getElementById('f-first').value.trim();
+  var last  = document.getElementById('f-last').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var org   = document.getElementById('f-org').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+  var platforms = [].slice.call(document.querySelectorAll('#f-platforms .tag:not(.unselected)')).map(function(t){return t.dataset.p;});
+  var valid = true;
+  if (!first) { markFErr('f-first','err-first'); valid=false; }
+  if (!EMAIL_RE.test(email)) { markFErr('f-email','err-email','Please enter a valid email address.'); valid=false; }
+  if (currentType==='media' && !org) { markFErr('f-org','err-org'); valid=false; }
+  if (!platforms.length) { document.getElementById('f-platforms').classList.add('err'); document.getElementById('err-platforms').classList.add('show'); valid=false; }
+  if (!valid) return;
+  if (isDuplicate(email) && !confirm('A contact with email '+email+' already exists.\n\nAdd anyway?')) return;
+  contacts.push({type:currentType,first:first,last:last,org:org,email:email,phone:phone,platforms:platforms});
+  saveContacts(); renderContacts(); hideAddForm();
+}
+
+// ═══════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b)  { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('pane-'+name).classList.add('active');
+  if (name==='distribute') renderDistribute();
+  if (name==='sentlog')    renderSentLog();
+  if (name==='settings')   renderSettings();
+}
+
+// ═══════════════════════════════════════
+// ANNOUNCEMENT: NEW / LIBRARY
+// ═══════════════════════════════════════
+function newAnnouncement() {
+  if (draftDirty || document.getElementById('ann-title').value.trim()) {
+    if (!confirm('Start a new announcement?\n\nYour current draft will be cleared. Save it to the library first if you want to keep it.')) return;
+  }
+  document.getElementById('ann-title').value   = '';
+  document.getElementById('ann-body').value    = '';
+  document.getElementById('ann-church').value  = '';
+  document.getElementById('ann-contact').value = '';
+  ['ann-title','ann-body'].forEach(function(id) { clearFErr(id,'err-'+id); });
+  hideNotice('gen-error');
+  generatedContent = {};
+  storage.set(KEYS.GENERATED, {}).catch(function(){});
+  storage.set(KEYS.DRAFT, {}).catch(function(){});
+  document.getElementById('gen-output').style.display = 'none';
+  draftDirty = false;
+  dbg('New announcement started','info');
+}
+
+function saveToLibrary() {
+  var title = document.getElementById('ann-title').value.trim();
+  if (!title) { alert('Please enter a headline before saving to the library.'); return; }
+
+  // Check limit
+  if (library.length >= settings.libMax) {
+    var oldest = library[library.length - 1];
+    var oldDate = new Date(oldest.ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    if (!confirm('The library is full (' + settings.libMax + ' announcements).\n\nThe oldest entry will be removed:\n"' + oldest.title + '" (' + oldDate + ')\n\nContinue?')) return;
+    library.pop();
+  }
+
+  var entry = {
+    id:       Date.now(),
+    ts:       new Date().toISOString(),
+    title:    title,
+    body:     document.getElementById('ann-body').value,
+    church:   document.getElementById('ann-church').value,
+    contact:  document.getElementById('ann-contact').value,
+    generated: JSON.parse(JSON.stringify(generatedContent)),
+  };
+  library.unshift(entry); // newest first
+  saveLibrary();
+  saveDraft();
+  dbg('Saved to library: ' + title, 'ok');
+
+  // Brief confirmation
+  var btn = document.querySelector('button[onclick="saveToLibrary()"]');
+  if (btn) { var orig = btn.innerHTML; btn.innerHTML = '✅ Saved!'; setTimeout(function(){ btn.innerHTML = orig; }, 1800); }
+}
+
+function openLibModal() {
+  renderLibModal();
+  document.getElementById('lib-modal').style.display = 'flex';
+}
+
+function closeLibModal(e) {
+  if (e && e.target !== document.getElementById('lib-modal')) return;
+  document.getElementById('lib-modal').style.display = 'none';
+}
+
+function renderLibModal() {
+  var body  = document.getElementById('lib-modal-body');
+  var badge = document.getElementById('lib-count-badge');
+  badge.textContent = library.length + ' / ' + settings.libMax;
+
+  if (!library.length) {
+    body.innerHTML = '<div class="empty"><span class="empty-icon">📭</span>No saved announcements yet.<br>Use "💾 Save to library" in Compose.</div>';
+    return;
+  }
+
+  body.innerHTML = library.map(function(entry, idx) {
+    var date = new Date(entry.ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var genKeys = Object.keys(entry.generated || {});
+    var tags = genKeys.map(function(k) {
+      return '<span class="tag '+k+'" style="cursor:default;font-size:11px;padding:2px 7px">' + (PLATFORMS[k]?PLATFORMS[k].label:k) + '</span>';
+    }).join('');
+    return '<div class="lib-entry">' +
+      '<div class="lib-entry-title">' + escHtml(entry.title) + '</div>' +
+      '<div class="lib-entry-meta">Saved ' + date + (genKeys.length ? ' · ' + genKeys.length + ' channel versions' : ' · No generated versions') + '</div>' +
+      (tags ? '<div class="lib-entry-channels">' + tags + '</div>' : '') +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+        '<button class="btn sm primary" onclick="loadFromLibrary('+idx+')">📂 Load into Compose</button>' +
+        '<button class="btn sm danger"  onclick="deleteFromLibrary('+idx+')">🗑 Delete</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function loadFromLibrary(idx) {
+  var entry = library[idx]; if (!entry) return;
+  var currentTitle = document.getElementById('ann-title').value.trim();
+  if (currentTitle && currentTitle !== entry.title) {
+    if (!confirm('Load "' + entry.title + '" into Compose?\n\nYour current draft will be replaced.')) return;
+  }
+  document.getElementById('ann-title').value   = entry.title   || '';
+  document.getElementById('ann-body').value    = entry.body    || '';
+  document.getElementById('ann-church').value  = entry.church  || '';
+  document.getElementById('ann-contact').value = entry.contact || '';
+  generatedContent = JSON.parse(JSON.stringify(entry.generated || {}));
+  storage.set(KEYS.GENERATED, generatedContent).catch(function(){});
+  storage.set(KEYS.DRAFT, {title:entry.title,body:entry.body,church:entry.church,contact:entry.contact}).catch(function(){});
+
+  if (Object.keys(generatedContent).length) renderOutputs();
+  else document.getElementById('gen-output').style.display = 'none';
+
+  ['ann-title','ann-body'].forEach(function(id) { clearFErr(id,'err-'+id); });
+  hideNotice('gen-error');
+  draftDirty = false;
+
+  document.getElementById('lib-modal').style.display = 'none';
+  switchTab('compose', document.querySelector('.tab-btn'));
+  dbg('Loaded from library: ' + entry.title, 'ok');
+}
+
+function deleteFromLibrary(idx) {
+  var entry = library[idx]; if (!entry) return;
+  if (!confirm('Delete "' + entry.title + '" from the library?\n\nThis cannot be undone.')) return;
+  library.splice(idx, 1);
+  saveLibrary();
+  renderLibModal();
+}
+
+// ═══════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════
+function renderSettings() {
+  document.getElementById('setting-lib-max').value = settings.libMax;
+  updateLibBadge();
+}
+
+function clearLibrary() {
+  if (!library.length) { alert('The library is already empty.'); return; }
+  if (!confirm('Clear all ' + library.length + ' saved announcements?\n\nThis cannot be undone.')) return;
+  library = [];
+  saveLibrary();
+  renderSettings();
+  dbg('Library cleared','ok');
+}
+
+// ═══════════════════════════════════════
+// DEMO MODE
+// ═══════════════════════════════════════
+function setDemoMode(on) {
+  demoMode = on;
+  settings.demoMode = on;
+  storage.set(KEYS.SETTINGS, settings).catch(function(){});
+  applyDemoMode();
+}
+
+function applyDemoMode() {
+  var banner = document.getElementById('demo-banner');
+  var chk    = document.getElementById('setting-demo');
+  if (chk) chk.checked = demoMode;
+  if (demoMode) {
+    banner.classList.add('show');
+    // Snapshot real data if not already snapshotted
+    if (!_realContacts) {
+      _realContacts = JSON.parse(JSON.stringify(contacts));
+      _realDraft = {
+        title:   document.getElementById('ann-title').value,
+        body:    document.getElementById('ann-body').value,
+        church:  document.getElementById('ann-church').value,
+        contact: document.getElementById('ann-contact').value
+      };
+    }
+    // Load demo contacts (replace live contacts in memory only)
+    contacts = JSON.parse(JSON.stringify(DEMO_CONTACTS));
+    renderContacts();
+    // Load demo announcement
+    document.getElementById('ann-title').value   = DEMO_ANN.title;
+    document.getElementById('ann-body').value    = DEMO_ANN.body;
+    document.getElementById('ann-church').value  = DEMO_ANN.church;
+    document.getElementById('ann-contact').value = DEMO_ANN.contact;
+    draftDirty = false;
+    dbg('Demo mode ON','info');
+  } else {
+    banner.classList.remove('show');
+    // Restore real data
+    if (_realContacts !== null) {
+      contacts = _realContacts;
+      _realContacts = null;
+      renderContacts();
+    }
+    if (_realDraft !== null) {
+      document.getElementById('ann-title').value   = _realDraft.title   || '';
+      document.getElementById('ann-body').value    = _realDraft.body    || '';
+      document.getElementById('ann-church').value  = _realDraft.church  || '';
+      document.getElementById('ann-contact').value = _realDraft.contact || '';
+      _realDraft = null;
+      draftDirty = false;
+    }
+    dbg('Demo mode OFF','info');
+  }
+  // Re-render distribute if it is the active tab
+  var distPane = document.getElementById('pane-distribute');
+  if (distPane && distPane.classList.contains('active')) renderDistribute();
+}
+
+function resetAllData() {
+  if (!confirm('Reset ALL app data?\n\nThis will permanently delete:\n• All contacts\n• Announcement library\n• Sent log\n• Current draft\n\nThis cannot be undone.')) return;
+  contacts = []; generatedContent = {}; sentLog = []; library = [];
+  ['CONTACTS','DRAFT','GENERATED','SENTLOG','LIBRARY'].forEach(function(k) {
+    storage.delete(KEYS[k]).catch(function(){});
+  });
+  document.getElementById('ann-title').value   = '';
+  document.getElementById('ann-body').value    = '';
+  document.getElementById('ann-church').value  = '';
+  document.getElementById('ann-contact').value = '';
+  document.getElementById('gen-output').style.display = 'none';
+  renderContacts(); renderSettings(); setSaveIndicator(true);
+  draftDirty = false;
+  dbg('All data reset','warn');
+  alert('All data has been cleared.');
+}
+
+// ═══════════════════════════════════════
+// CHANNEL FILTER FOR GENERATION
+// ═══════════════════════════════════════
+function toggleGenPick(el) { el.classList.toggle('unselected'); }
+function setAllGenPicks(on) {
+  document.querySelectorAll('#gen-channel-picks .tag').forEach(function(t) {
+    on ? t.classList.remove('unselected') : t.classList.add('unselected');
+  });
+}
+function getSelectedGenChannels() {
+  var picks = [].slice.call(document.querySelectorAll('#gen-channel-picks .tag:not(.unselected)'));
+  return picks.length ? picks.map(function(t){return t.dataset.p;}) : ALL_KEYS;
+}
+
+// ═══════════════════════════════════════
+// GENERATION
+// ═══════════════════════════════════════
+function startTimeoutBar(ms) {
+  var bar=document.getElementById('timeout-bar'), inner=document.getElementById('timeout-inner');
+  bar.style.display='block'; inner.style.transition='none'; inner.style.width='100%';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    inner.style.transition='width '+ms+'ms linear'; inner.style.width='0%';
+  });});
+}
+function stopTimeoutBar() { document.getElementById('timeout-bar').style.display='none'; }
+
+function generateContent() {
+  var title   = document.getElementById('ann-title').value.trim();
+  var body    = document.getElementById('ann-body').value.trim();
+  var church  = document.getElementById('ann-church').value.trim()  || 'UUFNN';
+  var contact = document.getElementById('ann-contact').value.trim() || 'See church office';
+  hideNotice('gen-error');
+  if (!title) { markFErr('ann-title','err-ann-title'); return; }
+  if (!body)  { markFErr('ann-body', 'err-ann-body');  return; }
+  saveDraft();
+
+  var selectedChannels = getSelectedGenChannels();
+  var btn = document.getElementById('gen-btn');
+  btn.innerHTML = '<span class="spinner"></span> Generating…'; btn.disabled = true;
+  startTimeoutBar(TIMEOUT_MS);
+
+  genTimeoutId = setTimeout(function() {
+    btn.innerHTML='✨ Generate selected versions'; btn.disabled=false; stopTimeoutBar();
+    showNotice('gen-error','⏱ The request timed out after 45 seconds. Please try again.');
+    dbg('Generation timed out','warn');
+  }, TIMEOUT_MS);
+
+  var ci = [];
+  var dt = new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  if (selectedChannels.indexOf('facebook')>=0)     ci.push('- facebook: 2-3 warm friendly paragraphs, full details, call to action. 200-280 words.');
+  if (selectedChannels.indexOf('instagram')>=0)    ci.push('- instagram: 3-4 punchy visual sentences, blank line, then 8-10 relevant hashtags.');
+  if (selectedChannels.indexOf('x')>=0)            ci.push('- x: HARD LIMIT 270 characters total including 1-2 hashtags.');
+  if (selectedChannels.indexOf('bluesky')>=0)      ci.push('- bluesky: HARD LIMIT 290 characters. Warm community tone, 1-2 hashtags.');
+  if (selectedChannels.indexOf('email')>=0)        ci.push('- email: Newsletter. First line "SUBJECT: [subject]". Greeting, 3-4 paragraphs, contact info, warm sign-off from '+church+'.');
+  if (selectedChannels.indexOf('bulletin')>=0)     ci.push('- bulletin: 4 lines max. Print-friendly. No URLs. What/when/where/who to ask.');
+  if (selectedChannels.indexOf('newspaper')>=0)    ci.push('- newspaper: AP-style press release. HEADLINE IN CAPS. Dateline "RENO, Nev. ('+dt+') —". 3-4 paragraphs. "###". "MEDIA CONTACT:" block.');
+  if (selectedChannels.indexOf('radio')>=0)        ci.push('- radio: 60-second read-aloud (~150 words). Written for the ear. Label "RADIO ADVISORY — approx. 60 seconds".');
+  if (selectedChannels.indexOf('tv')>=0)           ci.push('- tv: TV media advisory. WHAT/WHEN/WHERE/WHO/VISUAL OPPORTUNITIES sections. "STORY ANGLE:" line. Contact block.');
+  if (selectedChannels.indexOf('pressrelease')>=0) ci.push('- pressrelease: Full formal press release. "FOR IMMEDIATE RELEASE". Headline. 4-5 paragraphs with quote. "###". Full contact block.');
+
+  var kl = selectedChannels.join(', ');
+  var prompt = 'Generate congregation announcement content for these channels: ' + kl + '. ' +
+    'Return ONLY a raw JSON object (no markdown fences, no commentary) with exactly these keys: ' + kl + '.\n\n' +
+    'CHANNEL INSTRUCTIONS:\n' + ci.join('\n') + '\n\n' +
+    'Organization: ' + church + '\nContact: ' + contact + '\nHeadline: ' + title + '\nFull announcement: ' + body;
+
+  dbg('Generating: ' + kl, 'info');
+  if (typeof sendPrompt === 'function') { sendPrompt(prompt); }
+  else { callAPI(prompt); }
+}
+
+async function callAPI(prompt) {
+  try {
+    var resp = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt:prompt}) });
+    if (!resp.ok) {
+      var et = await resp.text().catch(function(){return '';});
+      var ed = {}; try { ed=JSON.parse(et); } catch(e) {}
+      throw new Error(ed.error || ('HTTP ' + resp.status));
+    }
+    var raw = await resp.text();
+    var d = {}; try { d=JSON.parse(raw); } catch(e) { throw new Error('Could not parse Worker response: '+e.message); }
+    if (d.error) throw new Error(d.error);
+    handleClaudeResponse(d.text || '');
+  } catch(e) {
+    clearTimeout(genTimeoutId); stopTimeoutBar();
+    var btn=document.getElementById('gen-btn'); btn.innerHTML='✨ Generate selected versions'; btn.disabled=false;
+    dbg('callAPI error: '+e.message,'err');
+    showNotice('gen-error','⚠️ '+e.message+'<br><small style="opacity:.7">Tap title 5× for debug log.</small>');
+    document.getElementById('debug-panel').classList.add('show');
+  }
+}
+
+function handleClaudeResponse(text) {
+  clearTimeout(genTimeoutId); stopTimeoutBar();
+  var btn=document.getElementById('gen-btn'); btn.innerHTML='✨ Generate selected versions'; btn.disabled=false;
+  if (!text || !text.trim()) {
+    showNotice('gen-error','⚠️ Empty response from AI. Check debug log (tap title 5×).');
+    document.getElementById('debug-panel').classList.add('show'); return;
+  }
+  try {
+    var clean = text.replace(/```json|```/g,'').trim();
+    var s=clean.indexOf('{'), e=clean.lastIndexOf('}');
+    if (s<0||e<0) throw new Error('No JSON object found.');
+    var data = JSON.parse(clean.slice(s,e+1));
+    var sel  = getSelectedGenChannels();
+    var miss = sel.filter(function(k){return !data[k]||!String(data[k]).trim();});
+    dbg('Parsed. Keys: '+Object.keys(data).join(', '),'ok');
+    if (miss.length) showNotice('gen-error','⚠️ Response incomplete — missing: '+miss.join(', ')+'. Showing what was received.');
+    else hideNotice('gen-error');
+    Object.keys(data).forEach(function(k){ if(data[k]&&String(data[k]).trim()) generatedContent[k]=String(data[k]); });
+    storage.set(KEYS.GENERATED, generatedContent).catch(function(){});
+    renderOutputs();
+  } catch(err) {
+    dbg('Parse error: '+err.message,'err');
+    showNotice('gen-error','⚠️ Could not parse AI response ('+err.message+'). Try again.');
+  }
+}
+window._claudeResponseHandler = handleClaudeResponse;
+
+// ═══════════════════════════════════════
+// RENDER OUTPUTS
+// ═══════════════════════════════════════
+function renderOutputs() {
+  document.getElementById('gen-output').style.display='block';
+  renderCharWarnings();
+  renderOutputGroup('out-social', SOCIAL_KEYS);
+  renderOutputGroup('out-trad',   MEDIA_KEYS);
+}
+
+function renderCharWarnings() {
+  var el=document.getElementById('char-warnings');
+  el.innerHTML = ['x','bluesky'].filter(function(k){ return generatedContent[k]&&generatedContent[k].length>PLATFORMS[k].limit; }).map(function(k){
+    return '<div class="notice warn" style="margin-bottom:8px">⚠️ '+PLATFORMS[k].label+' is '+generatedContent[k].length+' chars (limit: '+PLATFORMS[k].limit+'). Shorten before distributing.</div>';
+  }).join('');
+}
+
+function renderOutputGroup(elId, keys) {
+  var el=document.getElementById(elId);
+  el.innerHTML = keys.filter(function(k){return generatedContent[k];}).map(function(k){
+    var v=String(generatedContent[k]), lim=PLATFORMS[k]&&PLATFORMS[k].limit, over=lim&&v.length>lim;
+    var pill=lim?'<span class="char-pill '+(over?'over':'ok')+'" id="pill-'+k+'">'+v.length+'/'+lim+'</span>':'';
+    return '<div class="card" style="margin-bottom:10px">' +
+      '<div class="output-header">' +
+        '<span class="tag '+k+'" style="cursor:default">'+PLATFORMS[k].label+'</span>' +
+        '<div style="display:flex;align-items:center;gap:6px">' +
+          '<span class="edit-badge" id="edited-'+k+'" style="display:none">✏️ edited</span>' +
+          pill +
+          '<button class="btn xs" id="edit-btn-'+k+'" onclick="startEdit(\''+k+'\')">✏️ Edit</button>' +
+          '<button class="btn xs primary" id="done-btn-'+k+'" onclick="doneEdit(\''+k+'\')" style="display:none">✅ Done</button>' +
+          '<button class="btn xs" onclick="copyBlock(this,\'obk-'+k+'\')">📋 Copy</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="output-block" id="obk-'+k+'">' + escHtml(v) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function startEdit(k) {
+  var block=document.getElementById('obk-'+k); if (!block) return;
+  block.contentEditable='true'; block.style.maxHeight='none'; block.focus();
+  var range=document.createRange(); range.selectNodeContents(block); range.collapse(false);
+  var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  document.getElementById('edit-btn-'+k).style.display='none';
+  document.getElementById('done-btn-'+k).style.display='';
+  if (PLATFORMS[k]&&PLATFORMS[k].limit) block.oninput=function(){updateCharPill(k);};
+}
+
+function doneEdit(k) {
+  var block=document.getElementById('obk-'+k); if (!block) return;
+  block.contentEditable='false'; block.oninput=null;
+  generatedContent[k]=block.innerText||block.textContent||'';
+  storage.set(KEYS.GENERATED,generatedContent).catch(function(){});
+  document.getElementById('edit-btn-'+k).style.display='';
+  document.getElementById('done-btn-'+k).style.display='none';
+  document.getElementById('edited-'+k).style.display='';
+  if (PLATFORMS[k]&&PLATFORMS[k].limit) { updateCharPill(k); renderCharWarnings(); }
+  dbg('Edit saved: '+k,'ok');
+}
+
+function updateCharPill(k) {
+  var block=document.getElementById('obk-'+k), pill=document.getElementById('pill-'+k);
+  if (!block||!pill) return;
+  var len=(block.innerText||'').length, lim=PLATFORMS[k].limit, over=len>lim;
+  pill.className='char-pill '+(over?'over':'ok'); pill.textContent=len+'/'+lim;
+}
+
+function copyBlock(btn, id) {
+  var el=document.getElementById(id), text=el?(el.innerText||el.textContent||''):'';
+  if (!text) { btn.textContent='Nothing to copy'; setTimeout(function(){btn.innerHTML='📋 Copy';},2000); return; }
+  navigator.clipboard.writeText(text).then(function(){
+    btn.innerHTML='✅ Copied!'; setTimeout(function(){btn.innerHTML='📋 Copy';},2000);
+  }).catch(function(){
+    btn.textContent='Select text manually'; setTimeout(function(){btn.innerHTML='📋 Copy';},3000);
+  });
+}
+
+// ═══════════════════════════════════════
+// DISTRIBUTE
+// ═══════════════════════════════════════
+function setDistFilter(filter, chipEl) {
+  distFilter=filter;
+  document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active');}); chipEl.classList.add('active');
+  renderDistContactList();
+}
+
+function getFilteredContacts() {
+  return contacts.filter(function(c) {
+    if (!c.platforms.some(function(p){return generatedContent[p];})) return false;
+    if (distFilter==='social') return c.type==='social';
+    if (distFilter==='media')  return c.type==='media';
+    return true;
+  });
+}
+
+function selectAllDist(on) {
+  getFilteredContacts().forEach(function(c){distSelected[c.email]=on;});
+  renderDistContactList();
+}
+
+function renderDistribute() {
+  var hasContent=Object.keys(generatedContent).length>0, hasContacts=contacts.length>0;
+  if (!hasContent)  showNotice('dist-no-content'); else hideNotice('dist-no-content');
+  if (!hasContacts) showNotice('dist-no-contacts');else hideNotice('dist-no-contacts');
+  document.getElementById('dist-main').style.display=(hasContent&&hasContacts)?'block':'none';
+  if (!hasContent||!hasContacts) return;
+  contacts.forEach(function(c){if(distSelected[c.email]===undefined) distSelected[c.email]=true;});
+  renderDistContactList(); renderCoverageWarning(); renderCharLimitWarning();
+}
+
+function renderDistContactList() {
+  var el=document.getElementById('dist-contact-list'), visible=getFilteredContacts();
+  if (!visible.length) {
+    el.innerHTML='<div class="empty" style="padding:1rem"><span class="empty-icon">📭</span>No contacts match this filter.</div>';
+    document.getElementById('dist-sel-count').textContent='0 selected'; return;
+  }
+  el.innerHTML=visible.map(function(c){
+    var checked=distSelected[c.email]?'checked':'';
+    var mine=c.platforms.filter(function(p){return generatedContent[p];});
+    var tags=mine.map(function(p){return '<span class="tag '+p+'" style="cursor:default;font-size:11px;padding:2px 7px">'+(PLATFORMS[p]?PLATFORMS[p].label:p)+'</span>';}).join('');
+    return '<label class="sel-row">' +
+      '<input type="checkbox" '+checked+' onchange="toggleDistSel(\''+escHtml(c.email)+'\',this.checked)">' +
+      '<div class="avatar '+c.type+'" style="width:32px;height:32px;font-size:11px;flex-shrink:0">'+initials(c.first,c.last)+'</div>' +
+      '<div class="sel-row-info">' +
+        '<div style="font-size:13px;font-weight:600">'+escHtml(c.first+' '+c.last)+(c.org?' <span style="font-weight:400;color:var(--text2)">· '+escHtml(c.org)+'</span>':'')+'</div>' +
+        '<div style="font-size:11px;color:var(--text2);margin-bottom:3px">'+escHtml(c.email)+'</div>' +
+        '<div class="platform-tags" style="margin:0">'+tags+'</div>' +
+      '</div></label>';
+  }).join('');
+  var sel=visible.filter(function(c){return distSelected[c.email];}).length;
+  document.getElementById('dist-sel-count').textContent=sel+' of '+visible.length+' selected';
+}
+
+function toggleDistSel(email, checked) {
+  distSelected[email]=checked;
+  var visible=getFilteredContacts(), sel=visible.filter(function(c){return distSelected[c.email];}).length;
+  document.getElementById('dist-sel-count').textContent=sel+' of '+visible.length+' selected';
+}
+
+function renderCoverageWarning() {
+  var covered={};
+  contacts.forEach(function(c){c.platforms.forEach(function(p){covered[p]=true;});});
+  var unc=Object.keys(generatedContent).filter(function(p){return PLATFORMS[p]&&!covered[p];});
+  document.getElementById('dist-coverage-warn').innerHTML=unc.length
+    ?'<div class="notice warn" style="margin-bottom:8px">⚠️ No contact assigned for: '+unc.map(function(p){return PLATFORMS[p].label;}).join(', ')+'. Copy manually from Compose.</div>' :'';
+}
+
+function renderCharLimitWarning() {
+  var overs=['x','bluesky'].filter(function(k){return generatedContent[k]&&String(generatedContent[k]).length>PLATFORMS[k].limit;});
+  document.getElementById('dist-charlimit-warn').innerHTML=overs.length
+    ?'<div class="notice warn" style="margin-bottom:8px">⚠️ '+overs.map(function(k){return PLATFORMS[k].label+' exceeds '+PLATFORMS[k].limit+' chars';}).join('; ')+'. Edit in Compose before sending.</div>':'' ;
+}
+
+function sendSelected() {
+  if (!Object.keys(generatedContent).length) { renderDistribute(); return; }
+  var overs=['x','bluesky'].filter(function(k){return generatedContent[k]&&String(generatedContent[k]).length>PLATFORMS[k].limit;});
+  if (overs.length && !confirm(overs.map(function(k){return PLATFORMS[k].label;}).join(' and ')+' exceed character limits.\n\nSend anyway?')) return;
+
+  var toSend=getFilteredContacts().filter(function(c){return distSelected[c.email];});
+  contacts.forEach(function(c){
+    if (!distSelected[c.email]||toSend.indexOf(c)>=0) return;
+    if (c.platforms.some(function(p){return generatedContent[p];})) toSend.push(c);
+  });
+  toSend=toSend.filter(function(c,i,a){return a.indexOf(c)===i;});
+
+  if (!toSend.length) {
+    document.getElementById('dist-coverage-warn').innerHTML='<div class="notice error">⚠️ No selected contacts match any generated channel.</div>'; return;
+  }
+
+  var logEntry={ts:new Date().toISOString(), headline:document.getElementById('ann-title').value.trim()||'(untitled)', contacts:[]};
+  var opened=0;
+  toSend.forEach(function(c){
+    var mine=c.platforms.filter(function(p){return generatedContent[p];});
+    var subj=encodeURIComponent('UUFNN Media Announcement — your '+mine.map(function(p){return PLATFORMS[p].label;}).join(' & ')+' version');
+    var bodyText='Hi '+c.first+',\n\nHere is your formatted announcement, ready to copy and post:\n\n'+
+      mine.map(function(p){return '--- '+PLATFORMS[p].label+' ---\n'+String(generatedContent[p]);}).join('\n\n')+
+      '\n\nThank you for helping spread the word!\n\nUUFNN Media Team';
+    logEntry.contacts.push({name:c.first+' '+c.last+(c.org?' ('+c.org+')':''),email:c.email,channels:mine.map(function(p){return PLATFORMS[p].label;}),body:bodyText});
+    if (!demoMode) { setTimeout(function(){window.open('mailto:'+encodeURIComponent(c.email)+'?subject='+subj+'&body='+encodeURIComponent(bodyText));}, opened*400); }
+    opened++;
+  });
+  sentLog.unshift(logEntry); saveSentLog();
+  dbg('Sent: '+toSend.length+' contacts','ok');
+  document.getElementById('dist-coverage-warn').innerHTML=
+    demoMode
+      ? '<div class="notice warn" style="margin-bottom:8px">🎭 Demo Mode — '+opened+' email'+(opened!==1?'s':'')+' suppressed. Toggle Demo Mode off in Settings to send for real.</div>'
+      : '<div class="notice success" style="margin-bottom:8px">✅ Opened '+opened+' email draft'+(opened!==1?'s':'')+'. Review and send each one in your email app.</div>';
+}
+
+// ═══════════════════════════════════════
+// SENT LOG
+// ═══════════════════════════════════════
+function renderSentLog() {
+  var el=document.getElementById('sent-log-list'), btn=document.getElementById('clear-log-btn');
+  btn.style.display=sentLog.length?'':'none';
+  if (!sentLog.length) { el.innerHTML='<div class="empty"><span class="empty-icon">📭</span>No distribution runs yet.</div>'; return; }
+  el.innerHTML=sentLog.map(function(entry,idx){
+    var d=new Date(entry.ts);
+    var ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    var ts=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return '<div class="sent-entry">' +
+      '<div style="font-size:13px;font-weight:600">'+escHtml(entry.headline||'Announcement')+'</div>' +
+      '<div class="sent-ts">'+ds+' at '+ts+' · '+entry.contacts.length+' recipient'+(entry.contacts.length!==1?'s':'')+'</div>' +
+      entry.contacts.map(function(c,ci){
+        var eid='se-'+idx+'-'+ci;
+        return '<div style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border)">' +
+          '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+            '<span style="font-size:13px;font-weight:500">'+escHtml(c.name)+'</span>' +
+            '<span style="font-size:11px;color:var(--text3)">'+escHtml(c.email)+'</span>' +
+            '<button class="sent-expand" onclick="toggleSentBody(\''+eid+'\')">Show content</button>' +
+          '</div>' +
+          '<div style="margin-top:3px">'+c.channels.map(function(ch){
+            var k=Object.keys(PLATFORMS).find(function(pk){return PLATFORMS[pk].label===ch;})||'';
+            return '<span class="tag '+k+'" style="cursor:default;font-size:11px;padding:2px 7px">'+escHtml(ch)+'</span>';
+          }).join(' ')+'</div>' +
+          '<div class="sent-body" id="'+eid+'">'+escHtml(c.body)+'</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }).join('');
+}
+
+function toggleSentBody(id) {
+  var el=document.getElementById(id); if (!el) return;
+  var isOpen=el.classList.toggle('open');
+  var btn=el.previousElementSibling&&el.previousElementSibling.querySelector('.sent-expand');
+  if (btn) btn.textContent=isOpen?'Hide content':'Show content';
+}
+
+function clearSentLog() {
+  if (!confirm('Clear the entire sent log?\n\nThis cannot be undone.')) return;
+  sentLog=[]; saveSentLog(); renderSentLog();
+}
+
+// ═══════════════════════════════════════
+// HELP
+// ═══════════════════════════════════════
+function toggleHelp(id) {
+  var section=document.getElementById(id)&&document.getElementById(id).closest('.help-section'); if (!section) return;
+  var isOpen=section.classList.toggle('open');
+  if (isOpen) document.querySelectorAll('.help-section').forEach(function(s){if(s!==section) s.classList.remove('open');});
+}
+
+// ═══════════════════════════════════════
+// BACKUP & RESTORE
+// ═══════════════════════════════════════
+function exportBackup() {
+  var payload = {
+    _type:    'uufnn-media-hub-backup',
+    _version: APP_VERSION,
+    _ts:      new Date().toISOString(),
+    contacts: contacts,
+    library:  library,
+    sentLog:  sentLog,
+    settings: settings,
+  };
+  var json = JSON.stringify(payload, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  var date = new Date().toISOString().slice(0,10);
+  a.href     = url;
+  a.download = 'uufnn-backup-' + date + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  dbg('Backup exported: ' + contacts.length + ' contacts, ' + library.length + ' library entries, ' + sentLog.length + ' sent log entries', 'ok');
+}
+
+function importBackup(input) {
+  var file = input.files && input.files[0];
+  input.value = ''; // reset so same file can be picked again
+  if (!file) return;
+
+  var statusEl = document.getElementById('restore-status');
+  statusEl.className = 'notice info';
+  statusEl.textContent = '⏳ Reading backup file…';
+  statusEl.classList.remove('hidden');
+
+  var reader = new FileReader();
+  reader.onerror = function() {
+    statusEl.className = 'notice error';
+    statusEl.textContent = '❌ Could not read the file. Make sure it is a valid UUFNN backup JSON.';
+  };
+  reader.onload = function(e) {
+    var data;
+    try {
+      data = JSON.parse(e.target.result);
+    } catch(err) {
+      statusEl.className = 'notice error';
+      statusEl.textContent = '❌ File is not valid JSON: ' + err.message;
+      return;
+    }
+
+    // Validate
+    if (!data || data._type !== 'uufnn-media-hub-backup') {
+      statusEl.className = 'notice error';
+      statusEl.textContent = '❌ This does not appear to be a UUFNN Media Hub backup file.';
+      return;
+    }
+
+    var nc = Array.isArray(data.contacts) ? data.contacts.length : 0;
+    var nl = Array.isArray(data.library)  ? data.library.length  : 0;
+    var ns = Array.isArray(data.sentLog)  ? data.sentLog.length  : 0;
+    var bdate = data._ts ? new Date(data._ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'unknown date';
+
+    var msg = 'Backup from ' + bdate + ' (v' + (data._version||'?') + '):\n' +
+      '  • ' + nc + ' contact' + (nc!==1?'s':'') + '\n' +
+      '  • ' + nl + ' library entr' + (nl!==1?'ies':'y') + '\n' +
+      '  • ' + ns + ' sent log entr' + (ns!==1?'ies':'y') + '\n\n' +
+      'This will REPLACE all current data. Continue?';
+
+    if (!confirm(msg)) {
+      statusEl.className = 'notice';
+      statusEl.textContent = 'Restore cancelled.';
+      return;
+    }
+
+    // Apply
+    contacts = Array.isArray(data.contacts) ? data.contacts : [];
+    library  = Array.isArray(data.library)  ? data.library  : [];
+    sentLog  = Array.isArray(data.sentLog)  ? data.sentLog  : [];
+    if (data.settings && typeof data.settings === 'object') {
+      settings = Object.assign({ libMax: 20 }, data.settings);
+    }
+
+    // Persist
+    Promise.all([
+      storage.set(KEYS.CONTACTS, contacts),
+      storage.set(KEYS.LIBRARY,  library),
+      storage.set(KEYS.SENTLOG,  sentLog),
+      storage.set(KEYS.SETTINGS, settings),
+    ]).then(function() {
+      renderContacts();
+      updateLibBadge();
+      renderSettings();
+      setSaveIndicator(true);
+      statusEl.className = 'notice success';
+      statusEl.textContent = '✅ Restore complete — ' + nc + ' contact' + (nc!==1?'s':'') + ', ' + nl + ' library entr' + (nl!==1?'ies':'y') + ' loaded.';
+      dbg('Backup restored: ' + nc + ' contacts, ' + nl + ' library, ' + ns + ' sent log', 'ok');
+    }).catch(function(err) {
+      statusEl.className = 'notice error';
+      statusEl.textContent = '❌ Restore failed during save: ' + err.message;
+      dbg('Restore save error: ' + err.message, 'err');
+    });
+  };
+  reader.readAsText(file);
+}
+
+// ═══════════════════════════════════════
+// SERVICE WORKER
+// ═══════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      window._swRegistration=reg; dbg('SW registered','ok');
+      if (reg.waiting&&navigator.serviceWorker.controller) document.getElementById('update-banner').style.display='flex';
+      reg.addEventListener('updatefound', function(){
+        var nw=reg.installing; if (!nw) return;
+        nw.addEventListener('statechange', function(){
+          if (nw.state==='installed'&&navigator.serviceWorker.controller) document.getElementById('update-banner').style.display='flex';
+        });
+      });
+    }).catch(function(err){ dbg('SW failed: '+err.message,'warn'); });
+    var reloading=false;
+    navigator.serviceWorker.addEventListener('controllerchange',function(){if(reloading)return;reloading=true;window.location.reload();});
+  });
+}
+window.applyUpdate=function(){
+  var reg=window._swRegistration; if(reg&&reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+  document.getElementById('update-banner').style.display='none';
+};
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+(function init() {
+  dbg('App v'+APP_VERSION+' initializing','info');
+  document.querySelectorAll('#help-version,#help-version-2,#header-version,#settings-version').forEach(function(el){el.textContent=APP_VERSION;});
+
+  storage.get(KEYS.SETTINGS).then(function(r){
+    // demoMode defaults to true unless explicitly saved as false
+    var savedSettings = (r&&r.value) ? r.value : {};
+    settings = Object.assign({libMax:20}, savedSettings);
+    if (typeof settings.demoMode === 'undefined') settings.demoMode = true;
+    document.getElementById('setting-lib-max').value=settings.libMax;
+    demoMode = !!settings.demoMode;
+    applyDemoMode();
+  }).catch(function(){});
+
+  storage.get(KEYS.CONTACTS).then(function(r){
+    contacts=r.value||[]; dbg('Contacts: '+contacts.length,'info');
+    if (!contacts.length) loadDemo(); else renderContacts();
+  }).catch(function(){ loadDemo(); });
+
+  storage.get(KEYS.DRAFT).then(function(r){
+    var d=r.value;
+    if (d&&d.title) {
+      document.getElementById('ann-title').value   = d.title   ||'';
+      document.getElementById('ann-body').value    = d.body    ||'';
+      document.getElementById('ann-church').value  = d.church  ||'';
+      document.getElementById('ann-contact').value = d.contact ||'';
+      dbg('Draft restored','info');
+    } else { fillDemoAnn(); }
+  }).catch(function(){ fillDemoAnn(); });
+
+  storage.get(KEYS.GENERATED).then(function(r){
+    if (r&&r.value&&Object.keys(r.value).length) { generatedContent=r.value; dbg('Generated content restored','info'); renderOutputs(); }
+  }).catch(function(){});
+
+  storage.get(KEYS.SENTLOG).then(function(r){
+    if (r&&r.value&&Array.isArray(r.value)) { sentLog=r.value; dbg('Sent log: '+sentLog.length+' entries','info'); }
+  }).catch(function(){});
+
+  storage.get(KEYS.LIBRARY).then(function(r){
+    if (r&&r.value&&Array.isArray(r.value)) { library=r.value; dbg('Library: '+library.length+' entries','info'); updateLibBadge(); }
+  }).catch(function(){});
+
+  setSaveIndicator(true);
+})();
+</script>
+</body>
+</html>
