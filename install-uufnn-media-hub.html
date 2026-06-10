@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install UUFNN Media Hub — A Better Me Apps</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+
+    :root {
+      --navy:    #0f2d5e;
+      --navy2:   #1a3f7a;
+      --navy3:   #0a1f42;
+      --gold:    #c8a84b;
+      --gold2:   #e8c96a;
+      --amber:   #f59e0b;
+      --text:    #1a1a2e;
+      --text2:   #3d4466;
+      --text3:   #6b7280;
+      --bg:      #fafaf8;
+      --bg2:     #f3f2ee;
+      --border:  #d8d4c8;
+      --white:   #ffffff;
+      --radius:  10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--navy3) 0%, var(--navy) 60%, var(--navy2) 100%);
+      color: #fff;
+      padding: 48px 24px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 20%, rgba(200,168,75,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .app-icon {
+      width: 80px; height: 80px;
+      border-radius: 20px;
+      margin: 0 auto 16px;
+      background: var(--navy2);
+      border: 2px solid rgba(200,168,75,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .page-header h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 700;
+      letter-spacing: -.01em;
+      margin-bottom: 8px;
+    }
+    .page-header .tagline {
+      font-size: 15px;
+      color: rgba(255,255,255,0.75);
+      max-width: 480px;
+      margin: 0 auto 0;
+    }
+
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 40px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gold);
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy2);
+      margin: 28px 0 8px;
+    }
+
+    p { margin-bottom: 14px; color: var(--text2); }
+
+    ol, ul {
+      padding-left: 22px;
+      margin-bottom: 14px;
+      color: var(--text2);
+    }
+    li { margin-bottom: 7px; }
+    li strong { color: var(--text); }
+
+    .info-box {
+      background: #eef3fb;
+      border-left: 4px solid var(--navy2);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 16px;
+      margin: 16px 0 20px;
+      font-size: 14px;
+      color: var(--text2);
+    }
+    .info-box strong { color: var(--navy); }
+
+    .warn-box {
+      background: #fffbeb;
+      border-left: 4px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 16px;
+      margin: 16px 0 20px;
+      font-size: 14px;
+      color: #78350f;
+    }
+    .warn-box strong { color: #92400e; }
+
+    .contact-box {
+      background: var(--white);
+      border: 2px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 0 0 32px;
+      text-align: center;
+    }
+    .contact-box p {
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 0;
+    }
+    .contact-box strong {
+      color: var(--navy);
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 20px 0 8px;
+    }
+    .platform-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-size: 14px;
+    }
+    .platform-card .plat-name {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .platform-card .plat-browser {
+      color: var(--text3);
+      font-size: 12px;
+    }
+
+    .step-note {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text2);
+      margin: 14px 0;
+    }
+
+    figure {
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    figure img {
+      width: 100%;
+      display: block;
+    }
+    figcaption {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--text3);
+      font-style: italic;
+    }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text3);
+      padding: 24px;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--navy2); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    a { color: var(--navy2); }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="app-icon">📡</div>
+  <h1>UUFNN Media Hub</h1>
+  <p class="tagline">Write once — distribute everywhere. Tailored announcements for social and traditional media channels.</p>
+</header>
+
+<main class="content">
+
+  <h2>Getting the app</h2>
+
+  <div class="contact-box">
+    <p>Contact <strong>Katie Baker</strong> or <strong>Alan Jordan</strong> to obtain the app.</p>
+  </div>
+
+  <h2>What to expect on first launch</h2>
+
+  <p>When you first open the app, it starts in <strong>Demo Mode</strong> — you'll see a sample announcement along with a set of fictional volunteer and media contacts. This lets you explore every feature without touching any real data.</p>
+
+  <div class="info-box">
+    <strong>Demo Mode is on by default.</strong> An amber banner at the top of the screen reads "🎭 Demo Mode." When you're ready to use the app for real, tap <strong>✕ Exit Demo</strong> on that banner. You can also toggle Demo Mode on and off anytime in the <strong>Settings</strong> tab.
+  </div>
+
+  <p>Once you exit Demo Mode, add your real contacts (social media volunteers and traditional media contacts), compose an announcement, generate tailored versions for every channel with one tap, and distribute them directly from the app.</p>
+
+  <p>The Help tab explains each feature in detail.</p>
+
+  <h2>How to install on your device</h2>
+
+  <p>UUFNN Media Hub is a <strong>Progressive Web App (PWA)</strong> — it installs directly from your browser with no app store required. Once installed, it works offline; an internet connection is needed only when generating announcements.</p>
+
+  <div class="platform-grid">
+    <div class="platform-card">
+      <div class="plat-name">📱 iPhone / iPad</div>
+      <div class="plat-browser">Safari only</div>
+    </div>
+    <div class="platform-card">
+      <div class="plat-name">🤖 Android</div>
+      <div class="plat-browser">Chrome recommended</div>
+    </div>
+    <div class="platform-card">
+      <div class="plat-name">💻 Windows / Mac</div>
+      <div class="plat-browser">Edge or Chrome recommended</div>
+    </div>
+    <div class="platform-card">
+      <div class="plat-name">📗 Chromebook</div>
+      <div class="plat-browser">Chrome</div>
+    </div>
+  </div>
+
+  <h3>iPhone or iPad</h3>
+
+  <div class="warn-box">
+    <strong>Safari is required on iPhone and iPad.</strong> Apple only allows Safari to install apps to your home screen. If you opened this page in Chrome, Firefox, or another app's built-in browser, the install option will not appear. Before you start, make sure you are in Safari.
+  </div>
+
+  <ol>
+    <li>With UUFNN Media Hub open in Safari, tap the <strong>Share</strong> button. On newer iPhones it is inside the <strong>⋯</strong> menu at the bottom-right. On older iPhones it is the square-with-arrow icon in the bottom toolbar.</li>
+    <li>In the share sheet, scroll the list of options down and look for <strong>Add to Home Screen</strong> (a square with a plus sign). It is often near the bottom of the list.</li>
+    <li>Tap <strong>Add to Home Screen</strong>. A preview appears showing the app icon and name.</li>
+    <li>Tap <strong>Add</strong> in the top-right corner to confirm.</li>
+    <li>Go to your home screen and find the UUFNN Media Hub icon — a deep blue tile with a chalice and broadcast arcs.</li>
+  </ol>
+
+  <div class="step-note">
+    <strong>Can't find the icon?</strong> Swipe left past your last home screen page to reach the <strong>App Library</strong> and look in "Recently Added." To move it to a home screen page, long-press the tile and tap <strong>Add to Home Screen</strong>.
+  </div>
+
+  <h3>Android</h3>
+
+  <ol>
+    <li>Open UUFNN Media Hub in Chrome.</li>
+    <li>If Chrome shows an <strong>Install</strong> or <strong>Add to Home Screen</strong> prompt at the bottom of the screen, tap it.</li>
+    <li>If no prompt appears: tap the <strong>three-dot menu (⋮)</strong> in the top-right corner, then tap <strong>Install app</strong> or <strong>Add to Home Screen</strong>.</li>
+    <li>Tap <strong>Install</strong> to confirm.</li>
+    <li>The UUFNN Media Hub icon appears on your home screen. If you don't see it immediately, swipe up to open the app drawer and look there.</li>
+  </ol>
+
+  <div class="step-note">
+    <strong>Two options may appear:</strong> "This app is already installed — click to open" and "Create shortcut." Choose <strong>This app is already installed</strong> for the full standalone experience without a browser bar. The shortcut option also works but keeps the browser address bar visible.
+  </div>
+
+  <h3>Desktop — Windows or Mac (Edge or Chrome)</h3>
+
+  <div class="warn-box">
+    <strong>Use Microsoft Edge or Google Chrome.</strong> Firefox and Safari on desktop do not support installing Progressive Web Apps. Other Chromium-based browsers (such as Vivaldi or Brave) may work but their install prompts are less reliable — Edge or Chrome are recommended for the smoothest experience.
+  </div>
+
+  <p>The install button appears as a small icon at the <strong>right end of the address bar</strong>. In Edge it looks like a grid of small squares. In Chrome it looks like a monitor with a downward arrow. The screenshots below show exactly where to look and what to expect in Edge.</p>
+
+  <figure>
+    <img src="edge-addressbar.png" alt="Edge address bar with arrow pointing to the install icon at the far right">
+    <figcaption>The install icon (grid of squares) appears at the far right of the Edge address bar.</figcaption>
+  </figure>
+
+  <ol>
+    <li>Open UUFNN Media Hub in <strong>Edge</strong> or <strong>Chrome</strong>.</li>
+    <li>Look for the <strong>install icon</strong> at the far right of the address bar — a small grid of squares in Edge, or a monitor with a downward arrow in Chrome.</li>
+    <li>Click it. An install dialog appears showing the app name, icon, and publisher.</li>
+    <li>Click <strong>Install</strong> to confirm.</li>
+  </ol>
+
+  <figure>
+    <img src="edge-dialog.png" alt="Edge install dialog showing Install UUFNN Media Hub app with an Install button">
+    <figcaption>The Edge install dialog — click Install to add the app to your Start menu and taskbar.</figcaption>
+  </figure>
+
+  <div class="step-note">
+    <strong>After installing</strong>, the app appears in your Windows Start menu and can be pinned to your taskbar or desktop. To pin it: open the Start menu, find UUFNN Media Hub, right-click it, and choose <strong>Pin to taskbar</strong> or <strong>Pin to Start</strong>.
+  </div>
+
+  <div class="step-note">
+    <strong>Don't see the install icon?</strong> The app may already be installed — check your Start menu or Applications folder before trying anything else. If it is already installed, the browser menu will show an "Open in app" option instead.
+  </div>
+
+  <hr>
+
+  <h2>How to uninstall</h2>
+
+  <div class="warn-box">
+    <strong>Uninstalling removes all local data.</strong> Contacts, your announcement library, sent log, and settings are stored on your device. Use <strong>Settings → Export backup</strong> first if you want to preserve that data before uninstalling.
+  </div>
+
+  <h3>iPhone or iPad</h3>
+  <ol>
+    <li>Long-press the UUFNN Media Hub icon on your home screen.</li>
+    <li>Tap <strong>Remove App</strong>, then tap <strong>Delete App</strong>.</li>
+    <li>To also clear stored browser data: open <strong>Settings</strong> → scroll to <strong>Safari</strong> → <strong>Advanced</strong> → <strong>Website Data</strong> → find <code>abmeapps.github.io</code> and swipe left to delete.</li>
+  </ol>
+
+  <h3>Android</h3>
+  <ol>
+    <li>Long-press the UUFNN Media Hub icon on your home screen.</li>
+    <li>Tap <strong>Uninstall</strong>, or drag the icon to the trash.</li>
+    <li>To also clear stored data: open Chrome → three-dot menu → <strong>Settings</strong> → <strong>Site Settings</strong> → <strong>All Sites</strong> → find <code>abmeapps.github.io</code> → <strong>Clear &amp; Reset</strong>.</li>
+  </ol>
+
+  <h3>Desktop (Windows or Mac)</h3>
+  <ol>
+    <li>Open the installed UUFNN Media Hub app.</li>
+    <li>Click the <strong>three-dot menu</strong> in the app's title bar and select <strong>Uninstall UUFNN Media Hub</strong>.</li>
+    <li>Check <strong>Also clear data</strong> if prompted, then confirm.</li>
+  </ol>
+
+  <hr>
+
+  <h2>About your data</h2>
+
+  <p>All data — contacts, announcements, the sent log, and your library — is stored <strong>locally on your device</strong>. Nothing is sent to any server except the announcement text when you tap <strong>Generate</strong>, which is sent to an AI service to produce the tailored channel versions. No contact information is ever included in those requests.</p>
+
+  <p>Use <strong>Settings → Export backup</strong> to download a copy of all your data as a JSON file, and <strong>Settings → Restore</strong> to move it to a new device.</p>
+
+</main>
+
+<footer>
+  A Better Me Apps &nbsp;·&nbsp;
+  <a href="https://abmeapps.github.io/legal/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="https://abmeapps.github.io/legal/terms.html">Terms</a> &nbsp;·&nbsp;
+  Contact: <a href="mailto:info@max-opp.com">info@max-opp.com</a>
+</footer>
+
+</body>
+</html>
